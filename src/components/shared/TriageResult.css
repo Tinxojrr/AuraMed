@@ -1,0 +1,194 @@
+.result-wrapper {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* Cabecera */
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 28px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid;
+  margin-bottom: 24px;
+}
+
+.result-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+
+.result-header p { margin: 0; font-size: 0.875rem; }
+
+.result-turno {
+  margin-left: auto;
+  text-align: center;
+  border: 1.5px solid;
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.turno-label { font-size: 0.7rem; opacity: 0.7; text-transform: uppercase; letter-spacing: .06em; }
+.turno-num   { font-size: 1.4rem; font-weight: 700; }
+
+/* Cuerpo principal */
+.result-body {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 24px;
+  align-items: start;
+}
+
+.result-main { display: flex; flex-direction: column; gap: 20px; }
+
+.result-section h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.result-summary {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  background: var(--bg-page);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-primary);
+  margin: 0;
+}
+
+/* Meta cards */
+.result-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.meta-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+}
+
+.meta-card > div { display: flex; flex-direction: column; gap: 2px; }
+.meta-label { font-size: 0.72rem; color: var(--text-muted); }
+.meta-value { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+
+/* Lista de recomendaciones */
+.result-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.result-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.result-list.secondary li { color: var(--text-muted); }
+
+/* Confianza IA */
+.result-confidence {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.confidence-track {
+  flex: 1;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.confidence-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), #7C3AED);
+  border-radius: 99px;
+  transition: width 1s ease;
+}
+
+/* QR */
+.result-qr {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.result-qr h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.qr-box {
+  padding: 12px;
+  background: white;
+  border-radius: var(--radius-md);
+}
+
+.qr-name  { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); margin: 0; }
+.qr-hint  { font-size: 0.72rem; color: var(--text-muted); margin: 0; }
+
+/* Acciones */
+.result-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-reset:hover {
+  color: var(--text-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+@media (max-width: 640px) {
+  .result-body { grid-template-columns: 1fr; }
+  .result-meta { grid-template-columns: 1fr; }
+  .result-qr   { order: -1; }
+}

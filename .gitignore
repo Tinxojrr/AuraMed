@@ -1,0 +1,31 @@
+# ─── Dependencias ───
+node_modules/
+
+# ─── Variables de entorno (¡CLAVE!) ───
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# ─── Build / Producción ───
+dist/
+build/
+out/
+
+# ─── Logs ───
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── IDEs y SO ───
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.DS_Store
+Thumbs.db

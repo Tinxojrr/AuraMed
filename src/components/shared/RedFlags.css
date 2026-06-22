@@ -1,0 +1,77 @@
+.redflags-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.redflags-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #DC2626;
+}
+
+.redflags-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.redflag-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-page);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+  position: relative;
+}
+
+.redflag-btn:hover {
+  border-color: #DC2626;
+  color: #DC2626;
+  background: #FEF2F2;
+}
+
+.redflag-btn.active {
+  border-color: #DC2626;
+  background: #FEF2F2;
+  color: #DC2626;
+  font-weight: 500;
+}
+
+.redflag-icon { font-size: 1rem; flex-shrink: 0; }
+.redflag-label { flex: 1; }
+
+.redflag-check {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #DC2626;
+  background: #FECACA;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.redflag-warning {
+  font-size: 0.75rem;
+  color: #B91C1C;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  margin: 0;
+  animation: fadeInUp 0.3s ease;
+}

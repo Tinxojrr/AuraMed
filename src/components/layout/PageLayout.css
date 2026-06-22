@@ -1,0 +1,19 @@
+.page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-main {
+  flex: 1;
+  padding-top: 60px; /* altura del navbar */
+  padding: 60px 2rem 2rem;
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .page-main { padding: 60px 1rem 1rem; }
+}
+

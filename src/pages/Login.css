@@ -1,0 +1,490 @@
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-page);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── LADO IZQUIERDO: BRANDING E ILUSTRACIÓN ─── */
+
+.login-branding {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(10, 15, 30, 1) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 30px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Orbes ambientales de fondo */
+.login-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.orb-a {
+  top: 10%; left: 15%;
+  width: 350px; height: 350px;
+  background: #3B82F6;
+  animation: floatOrb 12s ease-in-out infinite alternate;
+}
+
+.orb-b {
+  bottom: 10%; right: 15%;
+  width: 400px; height: 400px;
+  background: #8B5CF6;
+  animation: floatOrb 10s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(50px, 40px) scale(1.2); }
+}
+
+.btn-back-home {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  transition: all 0.2s ease;
+}
+
+.btn-back-home:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-3px);
+}
+
+.login-logo-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.logo-icon-glow {
+  padding: 10px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 14px;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+}
+
+.login-logo-area h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: white;
+}
+
+.login-logo-area span {
+  color: #3B82F6;
+  font-weight: 300;
+}
+
+.security-badge-live {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #10B981;
+  letter-spacing: 0.06em;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+/* El Escáner Holográfico (Escenario central) */
+.scanner-stage {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.lock-hologram {
+  color: #3B82F6;
+  filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6));
+  animation: hologramFloat 4s ease-in-out infinite;
+}
+
+@keyframes hologramFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-8px) scale(1.03); }
+}
+
+/* Anillos expansivos */
+.pulse-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  pointer-events: none;
+}
+
+.ring-1 { animation: pulseOut 3s infinite cubic-bezier(0.215, 0.61, 0.355, 1); }
+.ring-2 { animation: pulseOut 3s infinite 1.5s cubic-bezier(0.215, 0.61, 0.355, 1); }
+
+@keyframes pulseOut {
+  0%   { transform: scale(0.5); opacity: 1; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* El haz de luz láser que escanea hacia abajo y arriba */
+.laser-beam {
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #3B82F6, #10B981, transparent);
+  box-shadow: 0 0 15px 3px rgba(16, 185, 129, 0.5);
+  z-index: 10;
+  animation: laserScan 3s ease-in-out infinite alternate;
+}
+
+@keyframes laserScan {
+  0%   { top: 18%; opacity: 0.3; }
+  50%  { opacity: 1; }
+  100% { top: 82%; opacity: 0.3; }
+}
+
+/* Consola de comandos Hacker */
+.terminal-console {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.terminal-header {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.terminal-dots { display: flex; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.red    { background: #EF4444; }
+.dot.yellow { background: #F59E0B; }
+.dot.green  { background: #10B981; }
+
+.terminal-title {
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.terminal-body {
+  padding: 14px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.typewriter-text {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  color: #3B82F6;
+  margin: 0;
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+  animation: fadeInOut 3.5s infinite;
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translateY(4px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  85%  { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-4px); }
+}
+
+.branding-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* ─── LADO DERECHO: FORMULARIO GLASS ─── */
+
+.login-form-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  z-index: 2;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  padding: 44px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 
+              0 0 0 1px rgba(59, 130, 246, 0.1) inset;
+  animation: formAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes formAppear {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.key-badge {
+  width: 40px; height: 40px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px auto;
+}
+
+.login-form h2 {
+  margin: 0 0 6px 0;
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+}
+
+.login-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 14px 16px 14px 46px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
+
+.input-with-icon input:focus {
+  outline: none;
+  background: rgba(59, 130, 246, 0.04);
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.input-with-icon input:focus + .input-icon,
+.input-with-icon input:focus ~ .input-icon {
+  color: #3B82F6;
+}
+
+/* Botón de Enviar con haz de barrido (Shimmer) */
+.btn-login-glow {
+  position: relative;
+  width: 100%;
+  padding: 16px;
+  margin-top: 14px;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
+  transition: all 0.2s ease;
+}
+
+.btn-login-glow:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.7);
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+}
+
+.btn-login-glow:hover .arrow-anim {
+  transform: translateX(4px);
+}
+
+.arrow-anim { transition: transform 0.2s; }
+
+/* El destello que cruza el botón */
+.shimmer-effect {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmerSweep 2.5s infinite;
+}
+
+@keyframes shimmerSweep {
+  100% { left: 200%; }
+}
+
+.btn-login-glow:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+@media (max-width: 950px) {
+  .login-container { flex-direction: column; }
+  .login-branding { display: none; }
+  .login-form-wrapper { padding: 20px; }
+  .login-form { padding: 32px; }
+}
+
+/* ─── BOTÓN FLOTANTE DEL TEMA ─── */
+.btn-theme-login {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 100;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-theme-login:hover {
+  color: #3B82F6;
+  background: rgba(148, 163, 184, 0.15);
+  transform: rotate(30deg) scale(1.1);
+}
+
+
+/* ========================================================
+   ☀️ MODO DÍA: ESTÉTICA "LABORATORIO CLÍNICO / APPLE"
+   ======================================================== */
+
+/* 1. Fondo izquierdo (Platino esmerilado) */
+.login-container.light .login-branding {
+  background: linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%);
+  border-right-color: rgba(0, 0, 0, 0.06);
+}
+
+.login-container.light .login-logo-area h1 { color: #0F172A; }
+.login-container.light .security-badge-live { background: #DCFCE7; border-color: #86EFAC; color: #059669; }
+.login-container.light .branding-footer { color: #64748B; }
+
+/* Botón de escape izquierdo */
+.login-container.light .btn-back-home { color: #475569; border-color: rgba(0,0,0,0.12); background: transparent; }
+.login-container.light .btn-back-home:hover { color: #0F172A; background: rgba(0,0,0,0.05); }
+
+/* Consola Hacker en Modo Día (Pasa a verse como una Terminal blanca de macOS) */
+.login-container.light .terminal-console {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+}
+.login-container.light .terminal-dots .dot.red { background: #FF5F56; }
+.login-container.light .terminal-dots .dot.yellow { background: #FFBD2E; }
+.login-container.light .terminal-dots .dot.green { background: #27C93F; }
+
+.login-container.light .typewriter-text { color: #0284C7; font-weight: 600; }
+
+/* 2. Formulario Derecho (Vidrio blanco translúcido) */
+.login-container.light .login-form {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 
+              0 0 0 1px rgba(255, 255, 255, 1) inset;
+}
+
+.login-container.light .login-form h2 { color: #0F172A; }
+.login-container.light .login-subtitle { color: #64748B; }
+.login-container.light .form-group label { color: #475569; }
+
+/* Inputs en modo día */
+.login-container.light .input-with-icon input {
+  background: rgba(0, 0, 0, 0.025);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #0F172A;
+}
+
+.login-container.light .input-with-icon input:focus {
+  background: #FFFFFF;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.login-container.light .input-icon { color: #94A3B8; }
