@@ -315,3 +315,57 @@
   text-align: center;
   gap: 1rem;
 }
+
+/* ===========================
+   LIVE TICKET STATES 
+   =========================== */
+
+/* Atendido State */
+.success-card {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(16, 185, 129, 0.1));
+}
+
+/* En Consulta State (ALERTA) */
+.alert-mode {
+  background: radial-gradient(circle at center, rgba(220, 38, 38, 0.3), var(--bg-page));
+  transition: background 0.3s ease;
+}
+
+.alert-card {
+  border-color: rgba(220, 38, 38, 0.8);
+  background: linear-gradient(145deg, rgba(220, 38, 38, 0.9), rgba(185, 28, 28, 0.9));
+}
+
+.pulse-bg-alert {
+  animation: pulseBgAlert 1.5s infinite alternate;
+}
+
+@keyframes pulseBgAlert {
+  0% { background: radial-gradient(circle at center, rgba(220, 38, 38, 0.1), var(--bg-page)); }
+  100% { background: radial-gradient(circle at center, rgba(220, 38, 38, 0.4), var(--bg-page)); }
+}
+
+.pulse-shadow {
+  animation: pulseShadow 1.5s infinite alternate;
+}
+
+@keyframes pulseShadow {
+  0% { box-shadow: 0 0 20px rgba(220, 38, 38, 0.5); }
+  100% { box-shadow: 0 0 60px rgba(220, 38, 38, 1); }
+}
+
+.bell-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.pulse-icon {
+  animation: pulseIcon 0.5s infinite alternate;
+}
+
+@keyframes pulseIcon {
+  0% { transform: scale(1) rotate(-10deg); }
+  100% { transform: scale(1.2) rotate(10deg); }
+}

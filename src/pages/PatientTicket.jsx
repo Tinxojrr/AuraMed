@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
 import { Clock, AlertCircle, AlertTriangle, CheckCircle, Stethoscope, ChevronDown } from 'lucide-react'
-import { obtenerTriajePorId } from '@/services/supabase'
+import { obtenerTriajePorId, suscribirTriajes } from '@/services/supabase'
 import './PatientTicket.css'
 
 const PRIORITY_CONFIG = {
@@ -30,6 +30,26 @@ export default function PatientTicket() {
       }
     }
     loadTicket()
+  }, [id])
+
+  useEffect(() => {
+    if (!id) return;
+    const canal = suscribirTriajes((payload) => {
+      // payload.new contains the updated row data
+      if (payload.new && String(payload.new.id) === String(id)) {
+        setTicket(prev => {
+          // If state changed to "en_consulta" for the first time, vibrate!
+          if (prev?.estado !== 'en_consulta' && payload.new.estado === 'en_consulta') {
+            if (navigator.vibrate) {
+              navigator.vibrate([500, 200, 500, 200, 1000]);
+            }
+          }
+          return { ...prev, ...payload.new }
+        });
+      }
+    });
+
+    return () => canal.unsubscribe();
   }, [id])
 
   if (loading) {
@@ -64,6 +84,60 @@ export default function PatientTicket() {
 
   // Generamos un número de turno pseudo-aleatorio basado en el ID para mantenerlo consistente
   const turnoNumber = ticket.id ? parseInt(ticket.id.toString().replace(/[^0-9]/g, '').slice(-3) || '0') + 1 : 42;
+
+  if (ticket.estado === 'atendido') {
+    return (
+      <div className="ticket-page">
+        <div className="ticket-container fade-in-up">
+          <div className="ticket-brand">
+            <div className="brand-logo">⚕</div>
+            <h1>AuraMed</h1>
+          </div>
+          <div className="ticket-card success-card">
+            <div className="ticket-body" style={{ textAlign: 'center', padding: '3rem 2rem' }}>
+              <CheckCircle size={64} color="#10b981" style={{ margin: '0 auto 1rem' }} />
+              <h2 style={{ fontSize: '1.75rem', marginBottom: '1rem', color: 'white' }}>¡Atención Finalizada!</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: '1.5' }}>
+                Esperamos que te sientas mejor pronto. Gracias por confiar en AuraMed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (ticket.estado === 'en_consulta') {
+    return (
+      <div className="ticket-page alert-mode pulse-bg-alert">
+        <div className="ticket-container fade-in-up">
+          <div className="ticket-card alert-card pulse-shadow">
+            <div className="ticket-body" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+              <div className="bell-icon pulse-icon">🔔</div>
+              <h1 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', textTransform: 'uppercase' }}>
+                ¡Es tu turno!
+              </h1>
+              <p style={{ fontSize: '1.25rem', color: '#fef08a', fontWeight: 600, marginBottom: '2rem' }}>
+                Por favor dirígete a consulta
+              </p>
+              
+              <div className="ticket-turn" style={{ borderColor: 'white', background: 'rgba(255,255,255,0.1)' }}>
+                <span style={{ color: 'rgba(255,255,255,0.8)' }}>Turno</span>
+                <strong style={{ color: 'white', fontSize: '2rem' }}>#{turnoNumber}</strong>
+              </div>
+
+              <div style={{ marginTop: '3rem' }}>
+                <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>Médico asignado</p>
+                <h3 style={{ color: 'white', fontSize: '1.25rem' }}>
+                  {ticket.medicos ? `Dr. ${ticket.medicos.nombre}` : (ticket.especialidad_recomendada || 'Medicina General')}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="ticket-page">
