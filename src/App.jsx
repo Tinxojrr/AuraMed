@@ -21,12 +21,7 @@ const ProtectedRoute = ({ children, session }) => {
   return children
 }
 
-const TicketVirtualPlaceholder = () => (
-  <div style={{ padding: '50px', textAlign: 'center', color: 'white' }}>
-    <h2>🎫 Sala de Espera Virtual</h2>
-    <p>Aquí construiremos el ticket con el código QR para el paciente.</p>
-  </div>
-)
+import PatientTicket from '@/pages/PatientTicket'
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -60,7 +55,7 @@ export default function App() {
         </PublicLayout>
       } />
       
-      <Route path="/ticket/:id" element={<TicketVirtualPlaceholder />} />
+      <Route path="/ticket/:id" element={<PatientTicket />} />
       
       <Route path="/login" element={
         session ? <Navigate to="/admin/dashboard" replace /> : <Login />
