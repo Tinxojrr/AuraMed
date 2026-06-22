@@ -171,7 +171,7 @@ function ModoChat({ paciente, setPaciente, zonas, setZonas,
       ].filter(Boolean).join(' | ')
 
       const resultado = await evaluarTriaje(conversacion, contexto)
-      await crearTriaje({
+      const triajeGuardado = await crearTriaje({
         paciente_nombre: paciente.nombre, paciente_rut: paciente.rut || null,
         paciente_edad: paciente.edad ? parseInt(paciente.edad) : null,
         paciente_genero: paciente.genero || null, sintomas_texto: conversacion,
@@ -182,7 +182,7 @@ function ModoChat({ paciente, setPaciente, zonas, setZonas,
         nivel_confianza: resultado.nivel_confianza,
         tiempo_espera_estimado: parseInt(resultado.tiempo_espera_estimado) || 30,
       })
-      onResultado(resultado)
+      onResultado({ ...resultado, id: triajeGuardado.id })
     } catch (err) {
       toast.error(err.message || 'Error al generar diagnóstico')
     } finally {
@@ -321,7 +321,7 @@ export default function Triage() {
       ].filter(Boolean).join(' | ')
 
       const iaResult = await evaluarTriaje(sintomas, contexto)
-      await crearTriaje({
+      const triajeGuardado = await crearTriaje({
         paciente_nombre: paciente.nombre, paciente_rut: paciente.rut || null,
         paciente_edad: paciente.edad ? parseInt(paciente.edad) : null,
         paciente_genero: paciente.genero || null, sintomas_texto: sintomas,
@@ -332,7 +332,7 @@ export default function Triage() {
         nivel_confianza: iaResult.nivel_confianza,
         tiempo_espera_estimado: parseInt(iaResult.tiempo_espera_estimado) || 30,
       })
-      setResult(iaResult)
+      setResult({ ...iaResult, id: triajeGuardado.id })
       toast.success('Triaje completado')
     } catch (err) {
       toast.error(err.message || 'Error al procesar el triaje')

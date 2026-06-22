@@ -31,13 +31,11 @@ export default function TriageResult({ result, paciente, onReset }) {
   const Icon   = config.icon
   const isUrgencia = result.prioridad === 'URGENCIA'
 
-  const qrData = JSON.stringify({
-    nombre:    paciente.nombre,
-    prioridad: result.prioridad,
-    especialidad: result.especialidad,
-    tiempo:    result.tiempo_espera_estimado,
-    fecha:     new Date().toLocaleString('es-CL'),
-  })
+  const baseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? `http://${__LOCAL_IP__}:${window.location.port}`
+    : window.location.origin
+
+  const qrData = result.id ? `${baseUrl}/ticket/${result.id}` : baseUrl
 
   return (
     <div className="result-wrapper fade-in-up">
