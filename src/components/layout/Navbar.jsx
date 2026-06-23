@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useTheme } from '@/store/ThemeContext'
-import { Sun, Moon, Activity, LayoutDashboard, Users, History, LogOut } from 'lucide-react'
+import { Sun, Moon, Activity, LayoutDashboard, Users, History, LogOut, Stethoscope } from 'lucide-react'
 import { cerrarSesion } from '@/services/supabase'
 import toast from 'react-hot-toast'
 import './Navbar.css'
@@ -8,7 +8,8 @@ import './Navbar.css'
 const links = [
   { to: '/admin/ingreso',   label: 'Nuevo Ingreso', icon: Activity },
   { to: '/admin/dashboard', label: 'Dashboard',     icon: LayoutDashboard },
-  { to: '/admin/panel',     label: 'Panel Médico',  icon: Users },
+  { to: '/admin/panel',     label: 'Panel General', icon: Users },
+  { to: '/admin/doctor',    label: 'Mi Box',        icon: Stethoscope },
   { to: '/admin/historial', label: 'Historial',     icon: History }
 ]
 

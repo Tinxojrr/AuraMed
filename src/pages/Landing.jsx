@@ -53,7 +53,7 @@ export default function Landing() {
           {/* NUEVO: Botón sutil en el header para los doctores */}
           <button 
             className="btn-outline-glow" 
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/admin/dashboard')}
             style={{ display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-muted)' }}
           >
             <Lock size={14} /> Acceso Staff
@@ -98,7 +98,7 @@ export default function Landing() {
           </button>
           
           {/* MODIFICADO: Botón secundario para el login médico */}
-          <button className="btn-glass" onClick={() => navigate('/login')}>
+          <button className="btn-glass" onClick={() => navigate('/admin/doctor')}>
             <Lock size={16} /> Portal Médico
           </button>
         </div>

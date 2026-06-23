@@ -24,6 +24,7 @@ const ProtectedRoute = ({ children, session }) => {
 import PatientTicket from '@/pages/PatientTicket'
 import FamilyTracker from '@/pages/FamilyTracker'
 import MentalTriage  from '@/pages/MentalTriage'
+import DoctorView    from '@/pages/DoctorView'
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -96,6 +97,16 @@ export default function App() {
           <PageLayout>
             <div style={{ paddingTop: '30px' }}>
               <MedicalPanel />
+            </div>
+          </PageLayout>
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/admin/doctor" element={
+        <ProtectedRoute session={session}>
+          <PageLayout>
+            <div style={{ paddingTop: '30px' }}>
+              <DoctorView />
             </div>
           </PageLayout>
         </ProtectedRoute>
