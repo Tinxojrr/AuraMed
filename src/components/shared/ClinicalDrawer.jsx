@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { X, Activity, Bot, FileText, CheckCircle, Clock } from 'lucide-react'
+import { X, Activity, Bot, FileText, CheckCircle, Clock, Download } from 'lucide-react'
+import html2pdf from 'html2pdf.js'
 import './ClinicalDrawer.css'
 
 const PRIORITY_COLORS = {
@@ -11,6 +12,7 @@ const PRIORITY_COLORS = {
 export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
   const [notas, setNotas] = useState('')
   const [guardando, setGuardando] = useState(false)
+  const [generandoPDF, setGenerandoPDF] = useState(false)
 
   if (!paciente) return null
 
@@ -23,6 +25,28 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
     setGuardando(false)
   }
 
+  const descargarPDF = async () => {
+    setGenerandoPDF(true)
+    const element = document.getElementById('ficha-clinica-pdf')
+    
+    // Opciones para asegurar formato formal A4
+    const opt = {
+      margin:       [15, 15, 15, 15],
+      filename:     `Ficha_Clinica_${paciente.paciente_nombre.replace(/\s+/g, '_')}.pdf`,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }
+
+    try {
+      await html2pdf().set(opt).from(element).save()
+    } catch (error) {
+      console.error('Error generando PDF:', error)
+    } finally {
+      setGenerandoPDF(false)
+    }
+  }
+
   return (
     <>
       {/* Fondo oscuro interactivo */}
@@ -31,24 +55,37 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
       {/* Panel lateral */}
       <div className="drawer-panel">
         
-        {/* Cabecera */}
-        <div className="drawer-header">
-          <div>
-            <div className="drawer-badge" style={{ background: config.bg, color: config.color }}>
-              <Activity size={14} />
-              {paciente.prioridad}
+        {/* Contenedor que se exportará a PDF */}
+        <div id="ficha-clinica-pdf" className="pdf-wrapper">
+          {/* Cabecera */}
+          <div className="drawer-header">
+            <div className="pdf-header-content">
+              <div className="drawer-badge" style={{ background: config.bg, color: config.color }}>
+                <Activity size={14} />
+                {paciente.prioridad}
+              </div>
+              <h2>{paciente.paciente_nombre}</h2>
+              <p className="drawer-meta">
+                RUT: {paciente.paciente_rut || 'No registrado'} • Ingreso: {new Date(paciente.created_at).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}
+              </p>
             </div>
-            <h2>{paciente.paciente_nombre}</h2>
-            <p className="drawer-meta">
-              RUT: {paciente.paciente_rut || 'No registrado'} • Ingreso: {new Date(paciente.created_at).toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' })}
-            </p>
+            
+            <div className="drawer-header-actions" data-html2canvas-ignore="true">
+              <button 
+                className="btn-download-pdf" 
+                onClick={descargarPDF}
+                disabled={generandoPDF}
+                title="Descargar Ficha en PDF"
+              >
+                <Download size={18} />
+              </button>
+              <button className="btn-close-drawer" onClick={onClose}>
+                <X size={20} />
+              </button>
+            </div>
           </div>
-          <button className="btn-close-drawer" onClick={onClose}>
-            <X size={20} />
-          </button>
-        </div>
 
-        <div className="drawer-body">
+          <div className="drawer-body">
           
           {/* Sección 1: Lo que dijo el paciente */}
           <div className="clinical-section">
@@ -93,9 +130,10 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
           </div>
 
         </div>
+        </div> {/* Cierra pdf-wrapper */}
 
         {/* Footer con el llamado a la acción */}
-        <div className="drawer-footer">
+        <div className="drawer-footer" data-html2canvas-ignore="true">
           <button className="btn-secondary" onClick={onClose}>
             Mantener en consulta
           </button>

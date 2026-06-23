@@ -215,3 +215,39 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+.drawer-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-download-pdf {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: #3B82F6;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-download-pdf:hover:not(:disabled) {
+  background: #3B82F6;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-download-pdf:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Ajustes especiales para cuando se genere el PDF (fondo blanco puro) */
+.pdf-wrapper {
+  background: var(--bg-card);
+}
