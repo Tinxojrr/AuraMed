@@ -20,9 +20,26 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
 
   const handleFinalizar = async () => {
     setGuardando(true)
-    // Aquí en el futuro guardaríamos las 'notas' en Supabase antes de cerrar
-    await onFinalizar(paciente.id, 'atendido')
-    setGuardando(false)
+    try {
+      const element = document.getElementById('ficha-clinica-pdf')
+      const opt = {
+        margin:       [15, 15, 15, 15],
+        filename:     `Ficha_${paciente.paciente_nombre.replace(/\s+/g, '_')}.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }
+      
+      const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob')
+      const fileName = `${paciente.paciente_rut || paciente.id}_${Date.now()}.pdf`
+      
+      await onFinalizar(paciente.id, 'atendido', notas, pdfBlob, fileName)
+    } catch (error) {
+      console.error('Error generando/subiendo PDF:', error)
+      await onFinalizar(paciente.id, 'atendido', notas, null, null)
+    } finally {
+      setGuardando(false)
+    }
   }
 
   const descargarPDF = async () => {

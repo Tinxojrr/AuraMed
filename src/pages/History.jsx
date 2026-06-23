@@ -113,6 +113,14 @@ function TimelineItem({ triaje, isLast }) {
                   <span>Confianza IA: {Math.round(triaje.nivel_confianza * 100)}%</span>
                 )}
               </div>
+
+              {triaje.pdf_url && (
+                <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border-color)', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <a href={triaje.pdf_url} target="_blank" rel="noreferrer" className="btn-refresh-hist" style={{ display: 'inline-flex', background: 'rgba(16, 185, 129, 0.1)', color: '#10B981', borderColor: 'rgba(16, 185, 129, 0.2)', textDecoration: 'none' }}>
+                    <FileText size={14} /> Ver PDF Original
+                  </a>
+                </div>
+              )}
             </div>
           )}
         </div>

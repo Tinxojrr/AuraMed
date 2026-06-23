@@ -287,9 +287,25 @@ export default function MedicalPanel() {
         <ClinicalDrawer 
         paciente={pacienteActivo} 
         onClose={() => setPacienteActivo(null)} 
-        onFinalizar={(id, estado) => {
-          moverTriaje(id, estado)
-          setPacienteActivo(null) // Cierra el panel automáticamente al dar de alta
+        onFinalizar={async (id, estado, notas, pdfBlob, pdfFilename) => {
+          try {
+            let publicUrl = null
+            if (pdfBlob && pdfFilename) {
+              const { subirFichaPDF, finalizarAtencion } = await import('@/services/supabase')
+              publicUrl = await subirFichaPDF(pdfBlob, pdfFilename)
+              await finalizarAtencion(id, estado, notas, publicUrl)
+            }
+            
+            // Actualizar localmente
+            setTriajes(prev =>
+              prev.map(t => t.id === id ? { ...t, estado, notas_medico: notas, pdf_url: publicUrl } : t)
+            )
+            toast.success(`Paciente dado de alta y ficha guardada en la nube`)
+          } catch (err) {
+            toast.error('Ficha dada de alta pero con error al subir a la nube')
+          } finally {
+            setPacienteActivo(null)
+          }
         }}
       />
 

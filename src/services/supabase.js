@@ -61,11 +61,40 @@ export async function actualizarEstadoTriaje(id, estado) {
     .from('triajes')
     .update({ estado })
     .eq('id', id)
-    .select()
-    .single()
 
   if (error) throw error
   return data
+}
+
+export async function finalizarAtencion(id, estado, notas, pdfUrl) {
+  const { data, error } = await supabase
+    .from('triajes')
+    .update({ 
+      estado,
+      notas_medico: notas || null,
+      pdf_url: pdfUrl || null
+    })
+    .eq('id', id)
+
+  if (error) throw error
+  return data
+}
+
+export async function subirFichaPDF(blob, fileName) {
+  const { data, error } = await supabase.storage
+    .from('fichas-clinicas')
+    .upload(`pdfs/${fileName}`, blob, {
+      contentType: 'application/pdf',
+      upsert: true
+    })
+
+  if (error) throw error
+  
+  const { data: { publicUrl } } = supabase.storage
+    .from('fichas-clinicas')
+    .getPublicUrl(`pdfs/${fileName}`)
+    
+  return publicUrl
 }
 
 export async function obtenerTriajesPorPaciente(paciente_rut) {
