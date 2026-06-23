@@ -4,8 +4,15 @@ import { Brain, Heart, ArrowLeft, Loader2, Sparkles, User, ChevronUp, ChevronDow
 import toast, { Toaster } from 'react-hot-toast'
 import { evaluarTriajeMental } from '../services/claude'
 import { crearTriaje } from '../services/supabase'
-import { formatRUT } from '../utils/formatters'
 import './MentalTriage.css'
+
+const formatRUT = (value) => {
+  let rut = value.replace(/[^0-9kK]/g, '').toUpperCase()
+  if (rut.length <= 1) return rut
+  const dv = rut.slice(-1)
+  const body = rut.slice(0, -1)
+  return body.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "-" + dv
+}
 
 const EMOCIONES = [
   { id: 'ansiedad', label: 'Ansiedad / Pánico', emoji: '😰' },
