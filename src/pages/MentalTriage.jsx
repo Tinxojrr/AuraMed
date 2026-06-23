@@ -107,14 +107,16 @@ export default function MentalTriage({ onResultado }) {
 
       // Enviar correo si el paciente dejó un email
       if (paciente.email && resultado.email_contencion) {
-        toast.promise(
+        await toast.promise(
           enviarCorreoEmailJS(paciente.email, paciente.nombre, resultado.email_contencion),
           {
             loading: 'Enviando pautas de apoyo a tu correo...',
-            success: 'Correo de apoyo enviado',
+            success: 'Correo de apoyo enviado exitosamente',
             error: 'No se pudo enviar el correo',
           }
         )
+        // Pequeña pausa para que el usuario alcance a leer el Toast de éxito antes de cambiar de pantalla
+        await new Promise(r => setTimeout(r, 1500))
       }
 
       // Redirigimos al ticket (que activará automáticamente el modo AuraZen)
