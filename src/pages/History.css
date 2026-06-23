@@ -150,9 +150,17 @@
 
 .timeline-item {
   display: flex;
-  gap: 16px;
-  padding-bottom: 20px;
+  gap: 20px;
+  padding-bottom: 24px;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
 }
+
+.timeline-item:nth-child(1) { animation-delay: 0.1s; }
+.timeline-item:nth-child(2) { animation-delay: 0.15s; }
+.timeline-item:nth-child(3) { animation-delay: 0.2s; }
+.timeline-item:nth-child(4) { animation-delay: 0.25s; }
+.timeline-item:nth-child(5) { animation-delay: 0.3s; }
 
 .timeline-item.last { padding-bottom: 0; }
 
@@ -162,19 +170,21 @@
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
-  width: 28px;
+  width: 32px;
 }
 
 .timeline-dot {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 2px solid;
+  border: 3px solid;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   z-index: 1;
+  background: var(--bg-page);
+  box-shadow: 0 0 0 4px var(--bg-page);
 }
 
 .timeline-line {
@@ -190,9 +200,9 @@
 .timeline-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-left: 3px solid;
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
+  border-left: 4px solid;
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
   cursor: pointer;
   transition: all var(--transition);
   box-shadow: var(--shadow-sm);
@@ -200,15 +210,18 @@
 
 .timeline-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateX(2px);
+  transform: translateY(-4px) translateX(2px);
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
 }
 
 .timeline-card-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .timeline-card-left {
@@ -365,40 +378,40 @@
 .patient-profile-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: 0 4px 20px -2px rgba(0,0,0,0.04);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
 }
 
 .profile-header {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
   margin-bottom: 24px;
   padding-bottom: 24px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .profile-avatar {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background: linear-gradient(135deg, #1A6FD4, #8B5CF6);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 800;
-  box-shadow: 0 4px 12px rgba(26, 111, 212, 0.3);
+  box-shadow: 0 4px 16px rgba(26, 111, 212, 0.4);
 }
 
 .profile-info h2 {
-  margin: 0 0 6px 0;
-  font-size: 1.5rem;
+  margin: 0 0 8px 0;
+  font-size: 1.75rem;
   color: var(--text-primary);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .profile-badges {
@@ -413,25 +426,33 @@
   font-size: 0.85rem;
   color: var(--text-secondary);
   background: var(--bg-page);
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
   border: 1px solid var(--border-color);
+  font-weight: 500;
 }
 
 .profile-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 20px;
 }
 
 .stat-box {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 16px;
+  gap: 14px;
+  padding: 20px;
   background: var(--bg-page);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
+  transition: all var(--transition);
+}
+
+.stat-box:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-card);
 }
 
 .stat-icon-blue { color: #3B82F6; }

@@ -77,8 +77,14 @@
   border-radius: var(--radius-lg);
   padding: 0;
   min-height: 500px;
-  transition: background var(--transition), border-color var(--transition);
+  transition: all var(--transition);
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
 }
+
+.kanban-col:nth-child(1) { animation-delay: 0.1s; }
+.kanban-col:nth-child(2) { animation-delay: 0.2s; }
+.kanban-col:nth-child(3) { animation-delay: 0.3s; }
 
 .kanban-col.drag-over {
   background: var(--color-primary-light);
@@ -90,33 +96,37 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
+  padding: 16px 20px;
   border-bottom: 2px solid;
+  background: rgba(255, 255, 255, 0.4);
+  border-top-left-radius: var(--radius-lg);
+  border-top-right-radius: var(--radius-lg);
 }
 
 .col-title {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .col-count {
   color: white;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 99px;
-  min-width: 24px;
+  min-width: 28px;
   text-align: center;
 }
 
 .col-cards {
-  padding: 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   min-height: 440px;
 }
 
@@ -126,7 +136,7 @@
   justify-content: center;
   height: 100px;
   color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   border: 1.5px dashed var(--border-color);
   border-radius: var(--radius-md);
   margin-top: 8px;
@@ -142,19 +152,22 @@
 .kanban-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-left: 3px solid;
+  border-left: 4px solid;
   border-radius: var(--radius-md);
-  padding: 14px;
+  padding: 18px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   box-shadow: var(--shadow-sm);
   transition: all var(--transition);
 }
 
 .kanban-card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  transform: translateY(-3px);
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
 }
 
 .kanban-card-urgencia {
