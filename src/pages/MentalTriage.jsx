@@ -15,12 +15,12 @@ const formatRUT = (value) => {
 }
 
 const EMOCIONES = [
-  { id: 'ansiedad', label: 'Ansiedad / Pánico', emoji: '😰' },
-  { id: 'tristeza', label: 'Tristeza Profunda', emoji: '😔' },
-  { id: 'insomnio', label: 'Insomnio', emoji: '🥱' },
-  { id: 'estres', label: 'Estrés Extremo', emoji: '🤯' },
-  { id: 'irritabilidad', label: 'Irritabilidad / Enojo', emoji: '😠' },
-  { id: 'angustia', label: 'Angustia / Ahogo', emoji: '🫁' },
+  { id: 'ansiedad', label: 'Ansiedad / Pánico', color: '#3b82f6' }, // Blue
+  { id: 'tristeza', label: 'Tristeza Profunda', color: '#6366f1' }, // Indigo
+  { id: 'insomnio', label: 'Insomnio', color: '#8b5cf6' }, // Violet
+  { id: 'estres', label: 'Estrés Extremo', color: '#ec4899' }, // Pink
+  { id: 'irritabilidad', label: 'Irritabilidad / Enojo', color: '#f43f5e' }, // Rose
+  { id: 'angustia', label: 'Angustia / Ahogo', color: '#06b6d4' }, // Cyan
 ]
 
 export default function MentalTriage({ onResultado }) {
@@ -144,9 +144,9 @@ export default function MentalTriage({ onResultado }) {
                 key={em.id}
                 className={`emotion-btn ${emocionesSelec.includes(em.id) ? 'selected' : ''}`}
                 onClick={() => handleEmocion(em.id)}
+                style={{ borderLeftColor: em.color }}
               >
-                <span className="emoji">{em.emoji}</span>
-                <span className="label">{em.label}</span>
+                <span className="label" style={{ color: emocionesSelec.includes(em.id) ? em.color : 'inherit' }}>{em.label}</span>
               </button>
             ))}
           </div>

@@ -1,7 +1,7 @@
 .mental-triage-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a, #1e1b4b);
-  color: #f8fafc;
+  background: #F8FAFC; /* Light gray/blue background */
+  color: #0F172A; /* Dark slate text */
   font-family: 'Inter', system-ui, sans-serif;
   padding-bottom: 4rem;
 }
@@ -11,12 +11,12 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 2rem;
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
   position: sticky;
   top: 0;
   z-index: 10;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
 }
 
 .btn-back {
@@ -25,15 +25,16 @@
   gap: 0.5rem;
   background: none;
   border: none;
-  color: #94a3b8;
+  color: #64748B;
   font-size: 1rem;
   cursor: pointer;
   transition: color 0.2s;
   padding: 0.5rem;
+  font-weight: 500;
 }
 
 .btn-back:hover {
-  color: #f8fafc;
+  color: #0F172A;
 }
 
 .mental-brand {
@@ -41,20 +42,21 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 1.25rem;
+  color: #0F172A;
 }
 
 .mental-brand strong {
   font-weight: 800;
-  color: #a78bfa;
+  color: #6366F1;
 }
 
 .mental-container {
-  max-width: 600px;
+  max-width: 650px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 3rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .mental-intro {
@@ -62,16 +64,14 @@
 }
 
 .mental-intro h1 {
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 800;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(90deg, #a78bfa, #f472b6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.75rem;
+  color: #1E293B;
 }
 
 .mental-intro p {
-  color: #94a3b8;
+  color: #475569;
   font-size: 1.1rem;
   line-height: 1.6;
 }
@@ -80,73 +80,75 @@
 .mental-emotions h3, .mental-textarea-container h3 {
   font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 1rem;
-  color: #e2e8f0;
+  margin-bottom: 1.25rem;
+  color: #334155;
 }
 
 .emotions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1rem;
 }
 
 .emotion-btn {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1.5rem 1rem;
-  border-radius: 16px;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  padding: 1.25rem 1rem;
+  border-radius: 12px;
+  border-left-width: 6px;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #cbd5e1;
+  transition: all 0.2s ease;
+  color: #475569;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
 
 .emotion-btn:hover {
-  background: rgba(30, 41, 59, 0.9);
   transform: translateY(-2px);
-  border-color: rgba(167, 139, 250, 0.4);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  border-color: #94A3B8;
 }
 
 .emotion-btn.selected {
-  background: rgba(139, 92, 246, 0.15);
-  border-color: #a78bfa;
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
-  color: #fff;
-  transform: scale(1.02);
-}
-
-.emotion-btn .emoji {
-  font-size: 2rem;
+  background: #F8FAFC;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  font-weight: 600;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
 }
 
 .emotion-btn .label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  text-align: center;
+  font-size: 0.95rem;
+  text-align: left;
 }
 
 /* Textarea */
 .mental-textarea {
   width: 100%;
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 1rem;
-  color: #fff;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+  padding: 1.25rem;
+  color: #0F172A;
   font-family: inherit;
   font-size: 1rem;
   resize: vertical;
-  transition: all 0.3s;
+  transition: all 0.2s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+}
+
+.mental-textarea::placeholder {
+  color: #94A3B8;
 }
 
 .mental-textarea:focus {
   outline: none;
-  border-color: #a78bfa;
-  background: rgba(30, 41, 59, 0.9);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  border-color: #6366F1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 /* Submit Button */
@@ -156,21 +158,22 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  background: linear-gradient(90deg, #a78bfa, #ec4899);
+  background: #0F172A;
   color: white;
   border: none;
   padding: 1.25rem;
-  border-radius: 16px;
+  border-radius: 12px;
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 10px 25px rgba(236, 72, 153, 0.3);
+  transition: all 0.2s;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
 }
 
 .btn-mental-submit:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(236, 72, 153, 0.4);
+  transform: translateY(-2px);
+  background: #1E293B;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2);
 }
 
 .btn-mental-submit:disabled {
@@ -196,14 +199,35 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Customizing the generic form card for Mental mode */
+/* Customizing the generic form card for Mental mode in light theme */
 .mental-card {
-  background: rgba(30, 41, 59, 0.6) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important;
+}
+
+.mental-card .card-title {
+  color: #1E293B;
+  font-weight: 600;
+}
+
+.mental-card label {
+  color: #475569;
+}
+
+.mental-card input {
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  color: #0F172A;
+}
+
+.mental-card input:focus {
+  border-color: #6366F1;
+  background: #FFFFFF;
 }
 
 @media (max-width: 600px) {
   .mental-container { padding: 1.5rem 1rem; }
-  .emotions-grid { grid-template-columns: repeat(2, 1fr); }
-  .emotion-btn { padding: 1rem 0.5rem; }
+  .emotions-grid { grid-template-columns: 1fr; }
+  .emotion-btn { padding: 1.25rem 1rem; }
 }
