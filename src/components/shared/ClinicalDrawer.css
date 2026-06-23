@@ -250,4 +250,19 @@
 /* Ajustes especiales para cuando se genere el PDF (fondo blanco puro) */
 .pdf-wrapper {
   background: var(--bg-card);
+}
+
+.force-light-pdf {
+  --bg-page: #ffffff !important;
+  --bg-card: #ffffff !important;
+  --text-primary: #1e293b !important;
+  --text-secondary: #475569 !important;
+  --text-muted: #64748b !important;
+  --border-color: #e2e8f0 !important;
+  background: white !important;
+  color: black !important;
+}
+
+.force-light-pdf * {
+  color: var(--text-primary);
 }

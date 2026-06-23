@@ -22,6 +22,10 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
     setGuardando(true)
     try {
       const element = document.getElementById('ficha-clinica-pdf')
+      
+      // Forzar estilos de modo claro antes de clonar para el PDF
+      element.classList.add('force-light-pdf')
+      
       const opt = {
         margin:       [15, 15, 15, 15],
         filename:     `Ficha_${paciente.paciente_nombre.replace(/\s+/g, '_')}.pdf`,
@@ -31,11 +35,18 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
       }
       
       const pdfBlob = await html2pdf().set(opt).from(element).output('blob')
+      
+      // Restaurar el tema nocturno inmediatamente
+      element.classList.remove('force-light-pdf')
+      
       const fileName = `${paciente.paciente_rut || paciente.id}_${Date.now()}.pdf`
       
       await onFinalizar(paciente.id, 'atendido', notas, pdfBlob, fileName)
     } catch (error) {
       console.error('Error generando/subiendo PDF:', error)
+      const element = document.getElementById('ficha-clinica-pdf')
+      if (element) element.classList.remove('force-light-pdf')
+      
       await onFinalizar(paciente.id, 'atendido', notas, null, null)
     } finally {
       setGuardando(false)
@@ -46,7 +57,9 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
     setGenerandoPDF(true)
     const element = document.getElementById('ficha-clinica-pdf')
     
-    // Opciones para asegurar formato formal A4
+    // Forzar modo claro
+    element.classList.add('force-light-pdf')
+    
     const opt = {
       margin:       [15, 15, 15, 15],
       filename:     `Ficha_Clinica_${paciente.paciente_nombre.replace(/\s+/g, '_')}.pdf`,
@@ -60,6 +73,8 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
     } catch (error) {
       console.error('Error generando PDF:', error)
     } finally {
+      // Restaurar tema
+      element.classList.remove('force-light-pdf')
       setGenerandoPDF(false)
     }
   }
