@@ -1,5 +1,22 @@
 import { supabase } from '@/lib/supabase'
 
+// ─── Utilidades ───────────────────────────────────────────────────────────────
+const applyDateRange = (query, rango) => {
+  if (!rango || rango === 'todos') return query
+  const now = new Date()
+  let limitDate = new Date()
+  
+  if (rango === 'hoy') {
+    limitDate.setHours(0, 0, 0, 0)
+  } else if (rango === 'semana') {
+    limitDate.setDate(now.getDate() - 7)
+  } else if (rango === 'mes') {
+    limitDate.setDate(now.getDate() - 30)
+  }
+  
+  return query.gte('created_at', limitDate.toISOString())
+}
+
 // ─── Triajes ──────────────────────────────────────────────────────────────────
 
 export async function crearTriaje(datos) {
@@ -13,12 +30,16 @@ export async function crearTriaje(datos) {
   return data
 }
 
-export async function obtenerTriajes(limite = 50) {
-  const { data, error } = await supabase
+export async function obtenerTriajes(limite = 50, rango = 'todos') {
+  let query = supabase
     .from('triajes')
     .select(`*, medicos(nombre, especialidad_id, especialidades(nombre))`)
     .order('created_at', { ascending: false })
     .limit(limite)
+
+  query = applyDateRange(query, rango)
+
+  const { data, error } = await query
 
   if (error) throw error
   return data
@@ -112,15 +133,17 @@ export function suscribirMedicos(callback) {
 
 // ─── Analytics ────────────────────────────────────────────────────────────────
 
-export async function obtenerEstadisticas() {
+export async function obtenerEstadisticas(rango = 'todos') {
   try {
-    // Traemos los últimos 500 pacientes sin importar de qué día son 
-    // para que el Dashboard siempre tenga vida durante las pruebas.
-    const { data, error } = await supabase
+    let query = supabase
       .from('triajes')
-      .select('prioridad, estado, especialidad_recomendada')
+      .select('prioridad, estado, especialidad_recomendada, created_at')
       .order('created_at', { ascending: false })
-      .limit(500)
+      .limit(2000) // Aumentamos límite para analíticas reales
+
+    query = applyDateRange(query, rango)
+
+    const { data, error } = await query
 
     if (error) throw error
 

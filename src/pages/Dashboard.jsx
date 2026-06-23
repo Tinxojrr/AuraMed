@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
-import { Activity, Users, AlertCircle, Clock, TrendingUp, RefreshCw, Radio } from 'lucide-react'
+import { Activity, Users, AlertCircle, Clock, TrendingUp, RefreshCw, Radio, Download } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, AreaChart, Area, CartesianGrid,
@@ -63,13 +63,14 @@ export default function Dashboard() {
   const [loading, setLoading]       = useState(true)
   const [isRefreshing, setIsRef]    = useState(false)
   const [lastUpdate, setLastUpdate] = useState(new Date())
+  const [rango, setRango]           = useState('todos')
 
   const cargarDatos = useCallback(async () => {
     setIsRef(true)
     try {
       const [statsData, triagesData] = await Promise.all([
-        obtenerEstadisticas(),
-        obtenerTriajes(100),
+        obtenerEstadisticas(rango),
+        obtenerTriajes(2000, rango),
       ])
       setStats(statsData)
       setTriajes(triagesData)
@@ -80,7 +81,7 @@ export default function Dashboard() {
       setLoading(false)
       setTimeout(() => setIsRef(false), 600) // Para que la animación de giro se aprecie
     }
-  }, [])
+  }, [rango])
 
   useEffect(() => {
     cargarDatos()
@@ -90,6 +91,34 @@ export default function Dashboard() {
     })
     return () => canal.unsubscribe()
   }, [cargarDatos])
+
+  const exportarCSV = () => {
+    if (!triajes.length) {
+      toast.error('No hay datos para exportar')
+      return
+    }
+    const headers = ['Fecha', 'Hora', 'RUT', 'Nombre', 'Prioridad', 'Estado', 'Especialidad Recomendada']
+    const rows = triajes.map(t => {
+      const date = new Date(t.created_at)
+      return [
+        date.toLocaleDateString('es-CL'),
+        date.toLocaleTimeString('es-CL'),
+        t.paciente_rut || 'N/A',
+        `"${t.paciente_nombre}"`,
+        t.prioridad,
+        t.estado,
+        t.especialidad_recomendada || 'N/A'
+      ].join(',')
+    })
+    const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + [headers.join(','), ...rows].join('\n')
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement("a")
+    link.setAttribute("href", encodedUri)
+    link.setAttribute("download", `AuraMed_Analiticas_${rango}_${new Date().getTime()}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  }
 
   const pieData = useMemo(() => {
     if (!stats) return []
@@ -205,10 +234,22 @@ export default function Dashboard() {
             <p>Sincronizado a las {lastUpdate.toLocaleTimeString('es-CL')} — Sistema de captura automática</p>
           </div>
 
-          <button className={`btn-refresh ${isRefreshing ? 'spinning' : ''}`} onClick={cargarDatos}>
-            <RefreshCw size={15} className="refresh-icon" />
-            <span>Actualizar</span>
-          </button>
+          <div className="dash-controls">
+            <select className="dash-select" value={rango} onChange={(e) => setRango(e.target.value)}>
+              <option value="todos">Historico Total</option>
+              <option value="hoy">Hoy</option>
+              <option value="semana">Últimos 7 días</option>
+              <option value="mes">Último mes</option>
+            </select>
+            <button className="btn-export-csv" onClick={exportarCSV}>
+              <Download size={15} />
+              <span>Exportar CSV</span>
+            </button>
+            <button className={`btn-refresh ${isRefreshing ? 'spinning' : ''}`} onClick={cargarDatos}>
+              <RefreshCw size={15} className="refresh-icon" />
+              <span>Actualizar</span>
+            </button>
+          </div>
         </div>
 
         {/* TARJETAS SUPERIORES */}
