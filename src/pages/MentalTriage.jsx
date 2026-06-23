@@ -39,7 +39,7 @@ export default function MentalTriage({ onResultado }) {
 
   const enviarCorreoEmailJS = async (email, nombre, mensaje) => {
     try {
-      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -55,9 +55,14 @@ export default function MentalTriage({ onResultado }) {
           }
         })
       })
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(errorText)
+      }
       console.log("Correo enviado a EmailJS")
     } catch (err) {
-      console.error("Error al enviar el correo", err)
+      console.error("Error al enviar el correo:", err)
+      throw err // Para que toast.promise pueda capturar el error
     }
   }
 
