@@ -196,7 +196,7 @@ function ModoChat({ paciente, setPaciente, zonas, setZonas,
         nivel_confianza: resultado.nivel_confianza,
         tiempo_espera_estimado: parseInt(resultado.tiempo_espera_estimado) || 30,
       })
-      onResultado({ ...resultado, id: triajeGuardado.id })
+      onResultado({ ...resultado, id: triajeGuardado.id, numero_turno: triajeGuardado.numero_turno })
     } catch (err) {
       toast.error(err.message || 'Error al generar diagnóstico')
     } finally {
@@ -347,7 +347,7 @@ export default function Triage() {
         nivel_confianza: iaResult.nivel_confianza,
         tiempo_espera_estimado: parseInt(iaResult.tiempo_espera_estimado) || 30,
       })
-      setResult({ ...iaResult, id: triajeGuardado.id })
+      setResult({ ...iaResult, id: triajeGuardado.id, numero_turno: triajeGuardado.numero_turno })
       toast.success('Triaje completado')
     } catch (err) {
       toast.error(err.message || 'Error al procesar el triaje')
