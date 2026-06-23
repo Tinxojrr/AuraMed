@@ -110,3 +110,77 @@ Responde siempre en español, de forma cálida y profesional.`,
   const data = await response.json()
   return data.content[0]?.text || ''
 }
+
+const MENTAL_PROMPT = `Eres AuraMed, un especialista en salud mental (psicólogo/psiquiatra clínico) encargado del triaje de primera respuesta.
+Tu rol es evaluar el estado emocional descrito por el paciente y clasificar su prioridad de atención psicológica/psiquiátrica.
+
+Debes responder SIEMPRE en el siguiente formato JSON exacto, sin texto adicional:
+{
+  "prioridad": "URGENCIA" | "PRIORITARIO" | "GENERAL",
+  "especialidad": "Psicología" | "Psiquiatría",
+  "resumen": "Breve análisis del estado emocional en 1-2 oraciones.",
+  "recomendaciones": ["Técnica de respiración sugerida", "Consejo de contención", "etc"],
+  "preguntas_seguimiento": ["pregunta de evaluación de riesgo", "pregunta de red de apoyo"],
+  "nivel_confianza": 0.0 a 1.0,
+  "tiempo_espera_estimado": "en minutos, como número entero"
+}
+
+Criterios de prioridad mental:
+- URGENCIA: Ideación suicida activa, brote psicótico, agitación severa incontrolable, riesgo para sí mismo o terceros.
+- PRIORITARIO: Crisis de pánico activa, angustia severa, llanto incontrolable, ansiedad aguda.
+- GENERAL: Estrés, problemas de sueño, síntomas depresivos leves, necesidad de contención o consejería.
+
+Sé sumamente empático, prioriza la seguridad del paciente y nunca improvises diagnósticos médicos definitivos.`
+
+/**
+ * Evalúa estado emocional con Claude y retorna el resultado del triaje mental
+ * @param {string} emociones - Descripción del estado de ánimo
+ * @param {string} [contexto] - Síntomas seleccionados y contexto adicional
+ * @returns {Promise<Object>} Resultado del triaje
+ */
+export async function evaluarTriajeMental(emociones, contexto = '') {
+  const userMessage = contexto
+    ? `Contexto del paciente: ${contexto}\n\nEstado emocional reportado: ${emociones}`
+    : `Estado emocional reportado: ${emociones}`
+
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: MENTAL_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    }),
+  })
+
+  if (!response.ok) {
+    const error = await response.json()
+    throw new Error(error.error?.message || 'Error al conectar con el servicio de IA')
+  }
+
+  const data = await response.json()
+  const text = data.content[0]?.text || ''
+
+  try {
+    return JSON.parse(text)
+  } catch {
+    try {
+      const match = text.match(/```(?:json)?\s*([\s\S]*?)```/)
+      if (match) return JSON.parse(match[1].trim())
+
+      const jsonMatch = text.match(/\{[\s\S]*\}/)
+      if (jsonMatch) return JSON.parse(jsonMatch[0])
+
+      throw new Error('No se encontró JSON válido en la respuesta')
+    } catch {
+      console.error('Respuesta IA cruda:', text)
+      throw new Error('La IA retornó un formato inesperado. Intenta de nuevo.')
+    }
+  }
+}

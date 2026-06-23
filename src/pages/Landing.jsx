@@ -153,7 +153,7 @@ export default function Landing() {
           <div className="wellness-content">
             <h2>¿Cómo está tu mente hoy?</h2>
             <p>La salud mental es tan importante como la física. Si te sientes abrumado, ansioso o necesitas contención, estamos aquí para ti. No esperes a una emergencia.</p>
-            <button className="btn-wellness" onClick={() => navigate('/triaje')}>
+            <button className="btn-wellness" onClick={() => navigate('/bienestar')}>
               Evaluación de Bienestar Preventivo
             </button>
           </div>

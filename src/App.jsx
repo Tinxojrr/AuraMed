@@ -23,6 +23,7 @@ const ProtectedRoute = ({ children, session }) => {
 
 import PatientTicket from '@/pages/PatientTicket'
 import FamilyTracker from '@/pages/FamilyTracker'
+import MentalTriage  from '@/pages/MentalTriage'
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -54,6 +55,10 @@ export default function App() {
         <PublicLayout>
           <Triage />
         </PublicLayout>
+      } />
+
+      <Route path="/bienestar" element={
+        <MentalTriage />
       } />
       
       <Route path="/ticket/:id" element={<PatientTicket />} />
