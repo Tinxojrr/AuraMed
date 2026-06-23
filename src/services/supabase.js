@@ -85,7 +85,7 @@ export async function subirFichaPDF(blob, fileName) {
     .from('fichas-clinicas')
     .upload(`pdfs/${fileName}`, blob, {
       contentType: 'application/pdf',
-      upsert: true
+      upsert: false
     })
 
   if (error) throw error
