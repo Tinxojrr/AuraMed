@@ -369,3 +369,132 @@
   0% { transform: scale(1) rotate(-10deg); }
   100% { transform: scale(1.2) rotate(10deg); }
 }
+
+/* ===========================
+   AURAZEN MODE (Psychology/Psychiatry)
+   =========================== */
+.ticket-page.zen-page {
+  background: radial-gradient(circle at top right, #e0e7ff, #eef2ff);
+  color: #1e293b;
+}
+
+.zen-page .ticket-brand h1 { color: #4f46e5; }
+.zen-page .ticket-brand p { color: #818cf8; }
+
+.zen-page .ticket-card {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 1);
+  box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.15);
+  color: #1e293b;
+}
+
+.zen-page .ticket-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.zen-page .ticket-turn span,
+.zen-page .ticket-priority-info span {
+  color: #475569 !important;
+}
+
+.zen-page .ticket-turn strong,
+.zen-page .ticket-priority-info h2 {
+  color: #1e293b !important;
+}
+
+.zen-page .cutout-left,
+.zen-page .cutout-right {
+  background: #eef2ff;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.zen-page .cutout-line {
+  border-top: 2px dashed rgba(0, 0, 0, 0.1);
+}
+
+.zen-page .ticket-footer .qr-wrapper {
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.1);
+}
+
+.zen-page .ticket-footer .qr-instructions,
+.zen-page .ticket-footer .qr-date {
+  color: #475569;
+}
+
+.zen-page .ticket-bottom-info {
+  color: #6366f1;
+}
+
+/* Zen Body & Animation */
+.zen-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 1.5rem !important;
+}
+
+.zen-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #6366f1;
+  margin: 0 0 0.5rem 0;
+}
+
+.zen-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0 0 2.5rem 0;
+}
+
+.zen-breathing-container {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.zen-circle {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.1));
+  box-shadow: 0 0 40px rgba(99, 102, 241, 0.3);
+  animation: breatheBox 16s infinite ease-in-out;
+}
+
+.zen-instruction {
+  position: relative;
+  z-index: 2;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.zen-instruction::after {
+  content: 'Inhala...';
+  animation: breatheText 16s infinite;
+}
+
+/* Box breathing: Inhale 4s (scale up), Hold 4s, Exhale 4s (scale down), Hold 4s */
+@keyframes breatheBox {
+  0% { transform: scale(0.6); }
+  25% { transform: scale(1.3); } 
+  50% { transform: scale(1.3); } 
+  75% { transform: scale(0.6); } 
+  100% { transform: scale(0.6); } 
+}
+
+@keyframes breatheText {
+  0% { content: 'Inhala...'; }
+  24.9% { content: 'Inhala...'; }
+  25% { content: 'Mantén...'; opacity: 0.6; }
+  49.9% { content: 'Mantén...'; opacity: 0.6; }
+  50% { content: 'Exhala...'; opacity: 1; }
+  74.9% { content: 'Exhala...'; opacity: 1; }
+  75% { content: 'Mantén...'; opacity: 0.6; }
+  100% { content: 'Mantén...'; opacity: 0.6; }
+}
+

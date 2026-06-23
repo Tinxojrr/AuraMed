@@ -140,7 +140,7 @@ export default function PatientTicket() {
   }
 
   return (
-    <div className="ticket-page">
+    <div className={`ticket-page ${ticket.especialidad_recomendada?.toLowerCase().includes('psico') ? 'zen-page' : ''}`}>
       <div className="ticket-container fade-in-up">
         
         {/* Marca / Header */}
@@ -172,29 +172,46 @@ export default function PatientTicket() {
             <div className="cutout-line"></div>
           </div>
 
-          {/* Sección Media: Datos del Paciente */}
-          <div className="ticket-body">
-            <div className="info-group">
-              <label>Paciente</label>
-              <h3>{ticket.paciente_nombre}</h3>
+          {/* Sección Media: Datos del Paciente o Modo Zen */}
+          {ticket.especialidad_recomendada?.toLowerCase().includes('psico') ? (
+            <div className="ticket-body zen-body">
+              <h3 className="zen-title">Respiración Guiada</h3>
+              <p className="zen-subtitle">Sigue el círculo para calmarte mientras esperas.</p>
+              
+              <div className="zen-breathing-container">
+                <div className="zen-circle"></div>
+                <div className="zen-instruction"></div>
+              </div>
+              
+              <div className="info-group" style={{ marginTop: '2rem', textAlign: 'center' }}>
+                <label style={{ color: 'rgba(255,255,255,0.7)' }}>Especialidad</label>
+                <p style={{ color: 'white', fontSize: '1.2rem', fontWeight: 600 }}>{ticket.especialidad_recomendada}</p>
+              </div>
             </div>
-            
-            <div className="info-row">
+          ) : (
+            <div className="ticket-body">
               <div className="info-group">
-                <label><Stethoscope size={14} /> Especialidad</label>
-                <p>{ticket.especialidad_recomendada || 'Medicina General'}</p>
+                <label>Paciente</label>
+                <h3>{ticket.paciente_nombre}</h3>
               </div>
-              <div className="info-group text-right">
-                <label><Clock size={14} /> Espera aprox.</label>
-                <p className="wait-time">{ticket.tiempo_espera_estimado} min</p>
+              
+              <div className="info-row">
+                <div className="info-group">
+                  <label><Stethoscope size={14} /> Especialidad</label>
+                  <p>{ticket.especialidad_recomendada || 'Medicina General'}</p>
+                </div>
+                <div className="info-group text-right">
+                  <label><Clock size={14} /> Espera aprox.</label>
+                  <p className="wait-time">{ticket.tiempo_espera_estimado} min</p>
+                </div>
+              </div>
+              
+              <div className="info-group">
+                <label>Motivo de atención</label>
+                <p className="clinical-summary">{ticket.resumen_clinico || 'Evaluación inicial requerida'}</p>
               </div>
             </div>
-            
-            <div className="info-group">
-              <label>Motivo de atención</label>
-              <p className="clinical-summary">{ticket.resumen_clinico || 'Evaluación inicial requerida'}</p>
-            </div>
-          </div>
+          )}
 
           <div className="ticket-cutout">
             <div className="cutout-left"></div>

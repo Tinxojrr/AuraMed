@@ -21,6 +21,9 @@ Criterios de prioridad:
 - PRIORITARIO: Necesita atención en menos de 2 horas (fiebre alta, dolor intenso, sangrado moderado, etc.)
 - GENERAL: Puede esperar turno normal (síntomas leves, consultas de control, etc.)
 
+Reglas adicionales:
+- SALUD MENTAL: Si detectas síntomas de salud mental (ansiedad severa, crisis de pánico, ideación, depresión), DEBES asignar la especialidad "Psicología" o "Psiquiatría". El sistema activará el "Modo AuraZen" para contener al paciente en sala de espera.
+
 Sé preciso, empático y profesional. Nunca improvises datos médicos.`
 
 /**
