@@ -140,7 +140,7 @@ export default function PatientTicket() {
   }
 
   return (
-    <div className={`ticket-page ${ticket.especialidad_recomendada?.toLowerCase().includes('psico') ? 'zen-page' : ''}`}>
+    <div className={`ticket-page ${(ticket.especialidad_recomendada?.toLowerCase().includes('psico') || ticket.especialidad_recomendada?.toLowerCase().includes('psiqui')) ? 'zen-page' : ''}`}>
       <div className="ticket-container fade-in-up">
         
         {/* Marca / Header */}
@@ -173,7 +173,7 @@ export default function PatientTicket() {
           </div>
 
           {/* Sección Media: Datos del Paciente o Modo Zen */}
-          {ticket.especialidad_recomendada?.toLowerCase().includes('psico') ? (
+          {(ticket.especialidad_recomendada?.toLowerCase().includes('psico') || ticket.especialidad_recomendada?.toLowerCase().includes('psiqui')) ? (
             <div className="ticket-body zen-body">
               <h3 className="zen-title">Respiración Guiada</h3>
               <p className="zen-subtitle">Sigue el círculo para calmarte mientras esperas.</p>
