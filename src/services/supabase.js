@@ -20,6 +20,11 @@ const applyDateRange = (query, rango) => {
 // ─── Triajes ──────────────────────────────────────────────────────────────────
 
 export async function crearTriaje(datos) {
+  // Asegurarnos de que la prioridad esté en mayúsculas para no violar el CHECK de la BD
+  if (datos.prioridad) {
+    datos.prioridad = datos.prioridad.toUpperCase().trim();
+  }
+
   const { data, error } = await supabase
     .from('triajes')
     .insert([datos])

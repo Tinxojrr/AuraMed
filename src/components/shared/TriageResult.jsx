@@ -50,7 +50,7 @@ export default function TriageResult({ result, paciente, onReset }) {
         </div>
         <div className="result-turno" style={{ color: config.color, borderColor: config.color }}>
           <span className="turno-label">Turno</span>
-          <span className="turno-num">#{Math.floor(Math.random() * 80) + 1}</span>
+          <span className="turno-num">#{result.numero_turno || 0}</span>
         </div>
       </div>
 

@@ -132,7 +132,7 @@ export default function PatientTicket() {
     fecha: new Date(ticket.created_at).toLocaleString('es-CL'),
   })
 
-  const turnoNumber = ticket.id ? parseInt(ticket.id.toString().replace(/[^0-9]/g, '').slice(-3) || '0') + 1 : 42;
+  const turnoNumber = ticket.numero_turno || 0;
 
   if (ticket.estado === 'atendido') {
     return (
