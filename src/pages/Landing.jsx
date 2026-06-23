@@ -30,7 +30,7 @@ export default function Landing() {
   }, [])
 
   return (
-    <div className={`landing ${loaded ? 'page-loaded' : ''}`}>
+    <div className={`landing ${loaded ? 'page-loaded' : ''} ${theme}`}>
       
       {/* Orbes de luz ambientales flotando en el fondo */}
       <div className="ambient-orb orb-1" />

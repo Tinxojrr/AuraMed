@@ -415,3 +415,131 @@
   .landing-hero { padding-top: 120px; }
   .footer-content { flex-direction: column; gap: 16px; text-align: center; }
 }
+
+/* ========================================================
+   ☀️ MODO DÍA MEJORADO (ALTO CONTRASTE Y ANIMACIONES)
+   ======================================================== */
+
+.landing.light {
+  background: #F8FAFC;
+  color: #0F172A;
+}
+
+.landing.light .ambient-orb {
+  opacity: 0.35;
+  filter: blur(100px);
+}
+
+/* Orbes más dinámicos en modo claro */
+.landing.light .orb-1 { animation-duration: 12s; }
+.landing.light .orb-2 { animation-duration: 10s; }
+
+.landing.light .landing-header {
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+}
+
+.landing.light .landing-brand { color: #0F172A; }
+.landing.light .landing-logo { color: white; }
+
+.landing.light .btn-outline-glow {
+  background: #FFFFFF;
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #1D4ED8;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+.landing.light .btn-outline-glow:hover {
+  background: #EFF6FF;
+  border-color: #3B82F6;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
+}
+
+.landing.light .landing-theme {
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #475569;
+}
+.landing.light .landing-theme:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #0F172A;
+}
+
+/* Pills */
+.landing.light .live-pill {
+  background: #DCFCE7;
+  border-color: #86EFAC;
+  color: #059669;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);
+}
+.landing.light .landing-badge {
+  background: #E0F2FE;
+  border-color: #7DD3FC;
+  color: #0284C7;
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.1);
+}
+
+.landing.light .landing-title { color: #0F172A; }
+.landing.light .landing-subtitle {
+  color: #334155;
+  font-weight: 500;
+}
+
+/* Botones Secundarios */
+.landing.light .btn-glass {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0F172A;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  font-weight: 600;
+}
+.landing.light .btn-glass:hover {
+  background: #F1F5F9;
+  border-color: #CBD5E1;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+/* Stats */
+.landing.light .stat-card {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+}
+.landing.light .stat-card:hover {
+  border-color: #3B82F6;
+  box-shadow: 0 20px 30px -10px rgba(59, 130, 246, 0.2);
+}
+.landing.light .stat-label { color: #64748B; font-weight: 500; }
+
+/* Priorities */
+.landing.light .priority-card {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+}
+.landing.light .priority-info strong { color: #0F172A; }
+.landing.light .priority-info p { color: #64748B; font-weight: 500; }
+
+/* Features */
+.landing.light .section-head h2 { color: #0F172A; }
+.landing.light .feature-card {
+  background: #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+}
+.landing.light .feature-card h3 { color: #0F172A; }
+.landing.light .feature-card p { color: #475569; font-weight: 500; }
+
+/* CTA */
+.landing.light .cta-box {
+  background: linear-gradient(180deg, #FFFFFF, #F8FAFC);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.06);
+}
+.landing.light .cta-box h2 { color: #0F172A; }
+.landing.light .cta-box p { color: #475569; font-weight: 500; }
+.landing.light .cta-glow { opacity: 0.15; }
+
+/* Footer */
+.landing.light .landing-footer { border-top-color: rgba(0, 0, 0, 0.1); }
+.landing.light .footer-copy { color: #64748B; font-weight: 500; }
