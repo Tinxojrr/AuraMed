@@ -122,7 +122,8 @@ Debes responder SIEMPRE en el siguiente formato JSON exacto, sin texto adicional
   "recomendaciones": ["Técnica de respiración sugerida", "Consejo de contención", "etc"],
   "preguntas_seguimiento": ["pregunta de evaluación de riesgo", "pregunta de red de apoyo"],
   "nivel_confianza": 0.0 a 1.0,
-  "tiempo_espera_estimado": "en minutos, como número entero"
+  "tiempo_espera_estimado": "en minutos, como número entero",
+  "email_contencion": "Un mensaje cálido, humano y empático (max 3 párrafos cortos) dirigido directamente al paciente (tratándolo por su nombre si se dio en el contexto), dándole consejos prácticos específicos basados en lo que contó, y validando sus emociones."
 }
 
 Criterios de prioridad mental:

@@ -25,7 +25,7 @@ const EMOCIONES = [
 
 export default function MentalTriage({ onResultado }) {
   const navigate = useNavigate()
-  const [paciente, setPaciente] = useState({ nombre: '', rut: '', edad: '', genero: '' })
+  const [paciente, setPaciente] = useState({ nombre: '', rut: '', edad: '', genero: '', email: '' })
   const [showDatos, setShowDatos] = useState(true)
   const [emocionesSelec, setEmocionesSelec] = useState([])
   const [relato, setRelato] = useState('')
@@ -35,6 +35,30 @@ export default function MentalTriage({ onResultado }) {
     setEmocionesSelec(prev => 
       prev.includes(id) ? prev.filter(e => e !== id) : [...prev, id]
     )
+  }
+
+  const enviarCorreoEmailJS = async (email, nombre, mensaje) => {
+    try {
+      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          service_id: import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_xxx',
+          template_id: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_xxx',
+          user_id: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'public_key_xxx',
+          template_params: {
+            paciente_email: email,
+            paciente_nombre: nombre,
+            mensaje_contencion: mensaje
+          }
+        })
+      })
+      console.log("Correo enviado a EmailJS")
+    } catch (err) {
+      console.error("Error al enviar el correo", err)
+    }
   }
 
   const generarTriaje = async () => {
@@ -50,6 +74,7 @@ export default function MentalTriage({ onResultado }) {
     setLoading(true)
     try {
       const contexto = [
+        paciente.nombre && `Nombre: ${paciente.nombre}`,
         paciente.edad && `Edad: ${paciente.edad} años`,
         paciente.genero && `Género: ${paciente.genero}`,
         emocionesSelec.length && `Emociones seleccionadas: ${emocionesSelec.join(', ')}`,
@@ -75,6 +100,18 @@ export default function MentalTriage({ onResultado }) {
         tiempo_espera_estimado: parseInt(resultado.tiempo_espera_estimado) || 15,
       })
 
+      // Enviar correo si el paciente dejó un email
+      if (paciente.email && resultado.email_contencion) {
+        toast.promise(
+          enviarCorreoEmailJS(paciente.email, paciente.nombre, resultado.email_contencion),
+          {
+            loading: 'Enviando pautas de apoyo a tu correo...',
+            success: 'Correo de apoyo enviado',
+            error: 'No se pudo enviar el correo',
+          }
+        )
+      }
+
       // Redirigimos al ticket (que activará automáticamente el modo AuraZen)
       navigate(`/ticket/${triajeGuardado.id}`)
     } catch (err) {
@@ -94,7 +131,7 @@ export default function MentalTriage({ onResultado }) {
           <span>Volver</span>
         </button>
         <div className="mental-brand">
-          <Brain size={24} color="#8b5cf6" />
+          <Brain size={24} color="#6366F1" />
           <span>Aura<strong>Zen</strong></span>
         </div>
       </header>
@@ -120,6 +157,13 @@ export default function MentalTriage({ onResultado }) {
                   <input type="text" placeholder="¿Cómo te llamamos?"
                     value={paciente.nombre} onChange={e => setPaciente(p => ({ ...p, nombre: e.target.value }))} />
                 </div>
+                <div className="field">
+                  <label>Correo Electrónico (Opcional)</label>
+                  <input type="email" placeholder="Te enviaremos consejos de apoyo"
+                    value={paciente.email} onChange={e => setPaciente(p => ({ ...p, email: e.target.value }))} />
+                </div>
+              </div>
+              <div className="field-row" style={{ marginTop: '1rem' }}>
                 <div className="field">
                   <label>RUT (Opcional)</label>
                   <input type="text" placeholder="12.345.678-9" maxLength="12"
