@@ -13,6 +13,14 @@ import './Triage.css'
 
 const INITIAL_PACIENTE = { nombre: '', rut: '', edad: '', genero: '' }
 
+const formatRUT = (value) => {
+  let rut = value.replace(/[^0-9kK]/g, '').toUpperCase()
+  if (rut.length <= 1) return rut
+  const dv = rut.slice(-1)
+  const body = rut.slice(0, -1)
+  return body.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "-" + dv
+}
+
 // ─── Resultado de urgencia directa (sin llamar a la IA) ────
 function UrgenciaDirecta({ paciente, razon, onReset }) {
   return (
@@ -57,8 +65,8 @@ function ModoDirecto({ paciente, setPaciente, sintomas, setSintomas, zonas, setZ
                   </div>
                   <div className="field">
                     <label>RUT</label>
-                    <input type="text" placeholder="12.345.678-9"
-                      value={paciente.rut} onChange={e => setPaciente(p => ({ ...p, rut: e.target.value }))} />
+                    <input type="text" placeholder="12.345.678-9" maxLength="12"
+                      value={paciente.rut} onChange={e => setPaciente(p => ({ ...p, rut: formatRUT(e.target.value) }))} />
                   </div>
                 </div>
                 <div className="field-row">
@@ -213,8 +221,8 @@ function ModoChat({ paciente, setPaciente, zonas, setZonas,
               </div>
               <div className="field">
                 <label>RUT</label>
-                <input type="text" placeholder="12.345.678-9"
-                  value={paciente.rut} onChange={e => setPaciente(p => ({ ...p, rut: e.target.value }))} />
+                <input type="text" placeholder="12.345.678-9" maxLength="12"
+                  value={paciente.rut} onChange={e => setPaciente(p => ({ ...p, rut: formatRUT(e.target.value) }))} />
               </div>
               <div className="field">
                 <label>Edad</label>

@@ -55,9 +55,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f8fafc;
+  background: var(--bg-page);
   border-radius: 16px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   overflow: hidden;
 }
 
@@ -67,8 +67,8 @@
   opacity: 0.25;
   background-size: 12px 12px;
   background-image: 
-    linear-gradient(to right, #94a3b8 1px, transparent 1px),
-    linear-gradient(to bottom, #94a3b8 1px, transparent 1px);
+    linear-gradient(to right, var(--text-muted) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--text-muted) 1px, transparent 1px);
 }
 
 .bodymap-svg {
@@ -80,16 +80,16 @@
 
 /* Silueta base de fondo (crea cohesión visual anatómica) */
 .body-silhouette-base {
-  fill: #f1f5f9;
-  stroke: #e2e8f0;
+  fill: var(--bg-page);
+  stroke: var(--border-color);
   stroke-width: 3;
   stroke-linejoin: round;
 }
 
 /* Nodos interactivos reales */
 .body-path {
-  fill: #e2e8f0;
-  stroke: #cbd5e1;
+  fill: var(--bg-card);
+  stroke: var(--border-color);
   stroke-width: 1.5;
   stroke-linejoin: round;
   cursor: pointer;
