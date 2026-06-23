@@ -141,25 +141,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ─── MARQUEE INFINITO (Especialidades) ─── */}
-      <section className="landing-marquee">
-        <div className="marquee-content">
-          <span>Cardiología Médica</span><span className="bullet">•</span>
-          <span>Traumatología y Ortopedia</span><span className="bullet">•</span>
-          <span>Medicina General</span><span className="bullet">•</span>
-          <span>Salud Mental y Psiquiatría</span><span className="bullet">•</span>
-          <span>Pediatría Integral</span><span className="bullet">•</span>
-          <span>Neurología Avanzada</span><span className="bullet">•</span>
-          {/* Duplicado para ilusión infinita */}
-          <span>Cardiología Médica</span><span className="bullet">•</span>
-          <span>Traumatología y Ortopedia</span><span className="bullet">•</span>
-          <span>Medicina General</span><span className="bullet">•</span>
-          <span>Salud Mental y Psiquiatría</span><span className="bullet">•</span>
-          <span>Pediatría Integral</span><span className="bullet">•</span>
-          <span>Neurología Avanzada</span><span className="bullet">•</span>
-        </div>
-      </section>
-
       {/* ─── CÓMO FUNCIONA (Timeline / Steps) ─── */}
       <section className="landing-steps">
         <div className="section-head">
@@ -295,6 +276,25 @@ export default function Landing() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ─── MARQUEE INFINITO (Especialidades) ─── */}
+      <section className="landing-marquee">
+        <div className="marquee-content">
+          <span>Cardiología Médica</span><span className="bullet">•</span>
+          <span>Traumatología y Ortopedia</span><span className="bullet">•</span>
+          <span>Medicina General</span><span className="bullet">•</span>
+          <span>Salud Mental y Psiquiatría</span><span className="bullet">•</span>
+          <span>Pediatría Integral</span><span className="bullet">•</span>
+          <span>Neurología Avanzada</span><span className="bullet">•</span>
+          {/* Duplicado para ilusión infinita */}
+          <span>Cardiología Médica</span><span className="bullet">•</span>
+          <span>Traumatología y Ortopedia</span><span className="bullet">•</span>
+          <span>Medicina General</span><span className="bullet">•</span>
+          <span>Salud Mental y Psiquiatría</span><span className="bullet">•</span>
+          <span>Pediatría Integral</span><span className="bullet">•</span>
+          <span>Neurología Avanzada</span><span className="bullet">•</span>
         </div>
       </section>
 
