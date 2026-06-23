@@ -22,6 +22,7 @@ const ProtectedRoute = ({ children, session }) => {
 }
 
 import PatientTicket from '@/pages/PatientTicket'
+import FamilyTracker from '@/pages/FamilyTracker'
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -56,6 +57,7 @@ export default function App() {
       } />
       
       <Route path="/ticket/:id" element={<PatientTicket />} />
+      <Route path="/seguimiento/:id" element={<FamilyTracker />} />
       
       <Route path="/login" element={
         session ? <Navigate to="/admin/dashboard" replace /> : <Login />
