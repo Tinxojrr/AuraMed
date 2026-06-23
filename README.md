@@ -6,7 +6,7 @@ AuraMed es una plataforma de **Triaje Médico Inteligente** diseñada para moder
 
 ---
 
-## ✨ Características Principales
+##  Características Principales
 
 1. **Triaje Automatizado por IA**
    - El paciente ingresa sus síntomas usando su propia voz o texto.
@@ -30,7 +30,7 @@ AuraMed es una plataforma de **Triaje Médico Inteligente** diseñada para moder
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+##  Tecnologías Utilizadas
 
 - **Frontend:** React 18 + Vite
 - **Estilos:** CSS3 Vanilla con diseño *Glassmorphism* y Modo Claro/Oscuro.
@@ -41,7 +41,7 @@ AuraMed es una plataforma de **Triaje Médico Inteligente** diseñada para moder
 
 ---
 
-## 🚀 Instalación y Desarrollo Local
+##  Instalación y Desarrollo Local
 
 1. Clona este repositorio:
    ```bash
@@ -69,14 +69,14 @@ AuraMed es una plataforma de **Triaje Médico Inteligente** diseñada para moder
 
 ---
 
-## 🔒 Consideraciones de Seguridad
+##  Consideraciones de Seguridad
 
 - **API Keys:** Las llaves de Anthropic y Supabase se gestionan a través de variables de entorno y NUNCA se exponen en el repositorio público (gracias al archivo `.gitignore`). En el entorno de producción (Vercel), estas se inyectan de forma segura.
 - **Base de Datos:** El esquema actual está diseñado para un Producto Mínimo Viable (MVP) y demostraciones académicas. Para un paso a producción en un entorno hospitalario real, es imperativo habilitar las **Row Level Security (RLS)** de PostgreSQL en Supabase, asegurando que solo el personal con roles de "Médico" o "Admin" puedan realizar operaciones de lectura/escritura en historiales sensibles.
 
 ---
 
-## 👨‍💻 Autor
+##  Autor
 
 **Martin Aburto**  
 *Proyecto de Título / Portafolio - 2026*

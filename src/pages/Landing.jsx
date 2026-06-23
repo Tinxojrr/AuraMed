@@ -6,18 +6,18 @@ import './Landing.css'
 
 const STATS = [
   { value: '< 10s', label: 'Tiempo de triaje IA' },
-  { value: '95%',   label: 'Precisión clínica' },
-  { value: '3',     label: 'Niveles de prioridad' },
-  { value: '10+',   label: 'Especialidades' },
+  { value: '95%', label: 'Precisión clínica' },
+  { value: '3', label: 'Niveles de prioridad' },
+  { value: '10+', label: 'Especialidades' },
 ]
 
 const FEATURES = [
-  { icon: Brain,     title: 'IA clínica avanzada',     desc: 'Claude analiza síntomas en lenguaje natural y clasifica la urgencia en segundos.', color: '#3b82f6' },
-  { icon: Zap,       title: 'Triaje en tiempo real',   desc: 'Cuerpo humano interactivo, resultados instantáneos y alertas visuales por prioridad.', color: '#f59e0b' },
-  { icon: Users,     title: 'Panel médico Kanban',     desc: 'Gestión visual de pacientes con arrastrar y soltar. Disponibilidad en vivo.', color: '#10b981' },
-  { icon: BarChart2, title: 'Dashboard analítico',     desc: 'Estadísticas en tiempo real: carga por especialidad, urgencias del día, tendencias.', color: '#8b5cf6' },
-  { icon: Clock,     title: 'Historial auditable',     desc: 'Cada triaje queda registrado en la nube con su línea de tiempo completa.', color: '#ef4444' },
-  { icon: Shield,    title: 'Seguro y confiable',      desc: 'Base de datos relacional con RLS, acceso controlado y datos encriptados.', color: '#06b6d4' },
+  { icon: Brain, title: 'IA clínica avanzada', desc: 'Claude analiza síntomas en lenguaje natural y clasifica la urgencia en segundos.', color: '#3b82f6' },
+  { icon: Zap, title: 'Triaje en tiempo real', desc: 'Cuerpo humano interactivo, resultados instantáneos y alertas visuales por prioridad.', color: '#f59e0b' },
+  { icon: Users, title: 'Panel médico Kanban', desc: 'Gestión visual de pacientes con arrastrar y soltar. Disponibilidad en vivo.', color: '#10b981' },
+  { icon: BarChart2, title: 'Dashboard analítico', desc: 'Estadísticas en tiempo real: carga por especialidad, urgencias del día, tendencias.', color: '#8b5cf6' },
+  { icon: Clock, title: 'Historial auditable', desc: 'Cada triaje queda registrado en la nube con su línea de tiempo completa.', color: '#ef4444' },
+  { icon: Shield, title: 'Seguro y confiable', desc: 'Base de datos relacional con RLS, acceso controlado y datos encriptados.', color: '#06b6d4' },
 ]
 
 export default function Landing() {
@@ -31,7 +31,7 @@ export default function Landing() {
 
   return (
     <div className={`landing ${loaded ? 'page-loaded' : ''} ${theme}`}>
-      
+
       {/* Orbes de luz ambientales flotando en el fondo */}
       <div className="ambient-orb orb-1" />
       <div className="ambient-orb orb-2" />
@@ -49,10 +49,10 @@ export default function Landing() {
           <button className="landing-theme" onClick={toggleTheme} aria-label="Cambiar tema">
             {theme === 'light' ? <Moon size={17} /> : <Sun size={17} />}
           </button>
-          
+
           {/* NUEVO: Botón sutil en el header para los doctores */}
-          <button 
-            className="btn-outline-glow" 
+          <button
+            className="btn-outline-glow"
             onClick={() => navigate('/admin/dashboard')}
             style={{ display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-muted)' }}
           >
@@ -61,12 +61,12 @@ export default function Landing() {
         </div>
       </header>
 
-{/* ─── HERO ───────────────────────────────────────────── */}
+      {/* ─── HERO ───────────────────────────────────────────── */}
       <section className="landing-hero">
-        
+
         {/* 1. ABRE EL WRAPPER AQUÍ */}
         <div className="hero-badges-wrapper">
-          
+
           <div className="live-pill">
             <span className="pulse-dot"></span>
             <Sparkles size={13} className="pill-icon" />
@@ -96,13 +96,13 @@ export default function Landing() {
           <button className="btn-shimmer" onClick={() => navigate('/triaje')}>
             Comenzar triaje <ChevronRight size={18} />
           </button>
-          
+
           {/* MODIFICADO: Botón secundario para el login médico */}
           <button className="btn-glass" onClick={() => navigate('/admin/doctor')}>
             <Lock size={16} /> Portal Médico
           </button>
         </div>
-  
+
 
         <div className="landing-stats">
           {STATS.map((s) => (
@@ -223,10 +223,10 @@ export default function Landing() {
 
         <div className="features-grid">
           {FEATURES.map(({ icon: Icon, title, desc, color }) => (
-            <div 
-              className="feature-card" 
+            <div
+              className="feature-card"
               key={title}
-              style={{ '--feature-color': color }} 
+              style={{ '--feature-color': color }}
             >
               <div className="feature-card-border" />
               <div className="feature-icon" style={{ color }}>
@@ -316,7 +316,7 @@ export default function Landing() {
             <span className="landing-logo">⚕</span>
             <span>Aura<strong>Med</strong></span>
           </div>
-          <span className="footer-copy">Proyecto de Título © 2025. Todos los derechos reservados.</span>
+          <span className="footer-copy">Proyecto personal de Martin Aburto en proceso © 2026. Todos los derechos reservados.</span>
         </div>
       </footer>
 
