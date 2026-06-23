@@ -1,80 +1,82 @@
-# AuraMed — Sistema de Triaje Inteligente
+# ⚕️ AuraMed - Asistente Clínico de Triaje con IA
 
-Sistema de triaje automatizado para atención primaria de salud, impulsado por Inteligencia Artificial.
+![AuraMed Banner](https://images.unsplash.com/photo-1516549655169-df83a0774514?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80)
 
-## Stack tecnológico
+AuraMed es una plataforma de **Triaje Médico Inteligente** diseñada para modernizar las salas de urgencia. Utiliza **Inteligencia Artificial Generativa (Claude 3.5 Sonnet)** para analizar en lenguaje natural los síntomas de los pacientes, clasificar su nivel de urgencia y derivarlos instantáneamente al box del especialista adecuado.
+
+---
+
+## ✨ Características Principales
+
+1. **Triaje Automatizado por IA**
+   - El paciente ingresa sus síntomas usando su propia voz o texto.
+   - Claude IA evalúa el riesgo clínico en milisegundos, asignando una de 3 prioridades: `URGENCIA`, `PRIORITARIO` o `GENERAL`.
+   - Derivación automática a más de 10 especialidades médicas.
+   - **Modo AuraZen:** Protocolo especial de contención psicológica para pacientes con crisis de salud mental.
+
+2. **Panel Kanban Médico (Realtime)**
+   - Recepcionistas y Jefes de Urgencia tienen una vista panorámica de la sala de espera.
+   - Tablero *Drag & Drop* para mover pacientes entre "En Espera", "En Consulta" y "Atendido".
+   - Sincronización en tiempo real vía **Supabase**.
+
+3. **Portal del Especialista (Mi Box)**
+   - Interfaz dedicada para el médico tratante.
+   - Filtro automático: El cardiólogo solo ve las derivaciones de cardiología.
+   - **Cajón Clínico:** Acceso inmediato al resumen generado por la IA, formulario de notas médicas y generación automática de **Ficha Médica en PDF**.
+
+4. **Ticket Digital y Tracker Familiar**
+   - Los pacientes pueden escanear un código QR para ver en su celular cuántos turnos faltan para ser atendidos.
+   - Los familiares reciben actualizaciones de estado en tiempo real.
+
+---
+
+## 🛠️ Tecnologías Utilizadas
 
 - **Frontend:** React 18 + Vite
-- **Base de datos:** Supabase (PostgreSQL + Realtime)
-- **IA:** Claude API (Anthropic)
-- **UI:** Framer Motion + Lucide Icons + Recharts
+- **Estilos:** CSS3 Vanilla con diseño *Glassmorphism* y Modo Claro/Oscuro.
+- **Base de Datos & Auth:** Supabase (PostgreSQL + Realtime Subscriptions).
+- **Inteligencia Artificial:** Anthropic API (Claude 3.5 Sonnet).
+- **Gestión de Estado:** Context API y Hooks personalizados.
+- **Componentes:** `lucide-react` (íconos), `dnd-kit` (Drag & Drop), `jsPDF` (Exportación de PDF).
 
-## Instalación
+---
 
-### 1. Clonar e instalar dependencias
+## 🚀 Instalación y Desarrollo Local
 
-```bash
-npm install
-```
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/Tinxojrr/AuraMed.git
+   cd auramed
+   ```
 
-### 2. Configurar variables de entorno
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-```bash
-cp .env.example .env
-```
+3. Configura tus variables de entorno:
+   Crea un archivo `.env` en la raíz del proyecto y añade tus credenciales:
+   ```env
+   VITE_SUPABASE_URL=tu_supabase_url
+   VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key
+   VITE_ANTHROPIC_API_KEY=tu_anthropic_api_key
+   ```
 
-Edita `.env` con tus credenciales:
-- `VITE_SUPABASE_URL` → URL de tu proyecto en supabase.com
-- `VITE_SUPABASE_ANON_KEY` → Anon key de tu proyecto Supabase
-- `VITE_ANTHROPIC_API_KEY` → API key de console.anthropic.com
+4. Ejecuta el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
 
-### 3. Crear la base de datos
+---
 
-En el **SQL Editor** de tu proyecto Supabase, ejecuta el contenido de:
-```
-src/lib/schema.sql
-```
+## 🔒 Consideraciones de Seguridad
 
-### 4. Iniciar el servidor de desarrollo
+- **API Keys:** Las llaves de Anthropic y Supabase se gestionan a través de variables de entorno y NUNCA se exponen en el repositorio público (gracias al archivo `.gitignore`). En el entorno de producción (Vercel), estas se inyectan de forma segura.
+- **Base de Datos:** El esquema actual está diseñado para un Producto Mínimo Viable (MVP) y demostraciones académicas. Para un paso a producción en un entorno hospitalario real, es imperativo habilitar las **Row Level Security (RLS)** de PostgreSQL en Supabase, asegurando que solo el personal con roles de "Médico" o "Admin" puedan realizar operaciones de lectura/escritura en historiales sensibles.
 
-```bash
-npm run dev
-```
+---
 
-La app estará disponible en `http://localhost:5173`
+## 👨‍💻 Autor
 
-## Estructura del proyecto
-
-```
-src/
-├── components/       # Componentes reutilizables
-│   ├── ui/           # Botones, inputs, badges, etc.
-│   ├── layout/       # Navbar, Sidebar, Layout
-│   └── shared/       # Cuerpo SVG, Kanban, Charts
-├── pages/            # Vistas principales
-│   ├── Landing.jsx   # Pantalla de bienvenida
-│   ├── Triage.jsx    # Formulario de triaje
-│   ├── Dashboard.jsx # Analytics en tiempo real
-│   ├── MedicalPanel  # Panel Kanban de médicos
-│   └── History.jsx   # Historial clínico
-├── services/
-│   ├── claude.js     # Integración con Claude API
-│   └── supabase.js   # Queries y suscripciones Realtime
-├── store/
-│   └── ThemeContext   # Modo oscuro/claro
-├── lib/
-│   ├── supabase.js   # Cliente Supabase
-│   └── schema.sql    # Schema de la base de datos
-└── styles/
-    └── globals.css   # Variables CSS y animaciones
-```
-
-## Rutas
-
-| Ruta         | Descripción                          |
-|--------------|--------------------------------------|
-| `/`          | Landing page animada                 |
-| `/triaje`    | Formulario de síntomas + IA          |
-| `/dashboard` | Dashboard analytics en tiempo real   |
-| `/panel`     | Panel Kanban para médicos            |
-| `/historial` | Historial clínico del paciente       |
+**Martin Aburto**  
+*Proyecto de Título / Portafolio - 2026*
