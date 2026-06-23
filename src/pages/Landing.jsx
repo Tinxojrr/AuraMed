@@ -279,6 +279,18 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ─── CTA BANNER ──────────────────────────────────────── */}
+      <section className="landing-cta">
+        <div className="cta-box">
+          <div className="cta-glow" />
+          <h2>¿Listo para optimizar tu sala de espera?</h2>
+          <p>Prueba el flujo de ingreso de síntomas ahora mismo. No requiere tarjeta.</p>
+          <button className="btn-shimmer" onClick={() => navigate('/triaje')}>
+            Probar AuraMed gratis <ChevronRight size={18} />
+          </button>
+        </div>
+      </section>
+
       {/* ─── MARQUEE INFINITO (Especialidades) ─── */}
       <section className="landing-marquee">
         <div className="marquee-content">
@@ -295,18 +307,6 @@ export default function Landing() {
           <span>Salud Mental y Psiquiatría</span><span className="bullet">•</span>
           <span>Pediatría Integral</span><span className="bullet">•</span>
           <span>Neurología Avanzada</span><span className="bullet">•</span>
-        </div>
-      </section>
-
-      {/* ─── CTA BANNER ──────────────────────────────────────── */}
-      <section className="landing-cta">
-        <div className="cta-box">
-          <div className="cta-glow" />
-          <h2>¿Listo para optimizar tu sala de espera?</h2>
-          <p>Prueba el flujo de ingreso de síntomas ahora mismo. No requiere tarjeta.</p>
-          <button className="btn-shimmer" onClick={() => navigate('/triaje')}>
-            Probar AuraMed gratis <ChevronRight size={18} />
-          </button>
         </div>
       </section>
 
