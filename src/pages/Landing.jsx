@@ -144,6 +144,22 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ─── MENTAL HEALTH WELLNESS ──────────────────────────── */}
+      <section className="landing-wellness">
+        <div className="wellness-card">
+          <div className="wellness-icon">
+            <Brain size={32} />
+          </div>
+          <div className="wellness-content">
+            <h2>¿Cómo está tu mente hoy?</h2>
+            <p>La salud mental es tan importante como la física. Si te sientes abrumado, ansioso o necesitas contención, estamos aquí para ti. No esperes a una emergencia.</p>
+            <button className="btn-wellness" onClick={() => navigate('/triaje')}>
+              Evaluación de Bienestar Preventivo
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* ─── FEATURES (Bento Grid) ──────────────────────────── */}
       <section className="landing-features">
         <div className="section-head">
