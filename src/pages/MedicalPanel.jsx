@@ -302,7 +302,10 @@ export default function MedicalPanel() {
             )
             toast.success(`Paciente dado de alta y ficha guardada en la nube`)
           } catch (err) {
-            toast.error('Ficha dada de alta pero con error al subir a la nube')
+            console.error('Error finalizando:', err)
+            toast.error(`Error guardando en la nube: ${err.message || 'Error desconocido'}`)
+            // Aún así cerramos y actualizamos estado local
+            setTriajes(prev => prev.map(t => t.id === id ? { ...t, estado } : t))
           } finally {
             setPacienteActivo(null)
           }

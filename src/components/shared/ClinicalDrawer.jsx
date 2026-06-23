@@ -30,7 +30,7 @@ export default function ClinicalDrawer({ paciente, onClose, onFinalizar }) {
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       }
       
-      const pdfBlob = await html2pdf().set(opt).from(element).outputPdf('blob')
+      const pdfBlob = await html2pdf().set(opt).from(element).output('blob')
       const fileName = `${paciente.paciente_rut || paciente.id}_${Date.now()}.pdf`
       
       await onFinalizar(paciente.id, 'atendido', notas, pdfBlob, fileName)
