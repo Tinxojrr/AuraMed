@@ -108,6 +108,51 @@ export async function obtenerTriajesPorPaciente(paciente_rut) {
   return data
 }
 
+export async function obtenerPosicionFila(id) {
+  const { data, error } = await supabase
+    .from('triajes')
+    .select('id, prioridad, created_at')
+    .eq('estado', 'en_espera')
+
+  if (error) throw error
+
+  if (!data || data.length === 0) return 0;
+
+  const PRIORIDAD_VALOR = { URGENCIA: 0, PRIORITARIO: 1, GENERAL: 2 }
+
+  const ordenados = [...data].sort((a, b) => {
+    const pA = PRIORIDAD_VALOR[a.prioridad] ?? 3;
+    const pB = PRIORIDAD_VALOR[b.prioridad] ?? 3;
+    if (pA !== pB) return pA - pB;
+    return new Date(a.created_at) - new Date(b.created_at);
+  })
+
+  const index = ordenados.findIndex(t => String(t.id) === String(id));
+  return index >= 0 ? index : 0;
+}
+
+export async function actualizarNotasPaciente(id, notasExtra) {
+  const { data: paciente, error: errorGet } = await supabase
+    .from('triajes')
+    .select('resumen_clinico')
+    .eq('id', id)
+    .single()
+
+  if (errorGet) throw errorGet
+
+  const nuevoResumen = paciente.resumen_clinico 
+    ? `${paciente.resumen_clinico}\n\n[Actualización en sala de espera]:\n${notasExtra}`
+    : `[Actualización en sala de espera]:\n${notasExtra}`
+
+  const { data, error } = await supabase
+    .from('triajes')
+    .update({ resumen_clinico: nuevoResumen })
+    .eq('id', id)
+
+  if (error) throw error
+  return data
+}
+
 // ─── Médicos ──────────────────────────────────────────────────────────────────
 
 export async function obtenerMedicos() {

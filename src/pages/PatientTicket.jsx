@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { QRCodeSVG } from 'qrcode.react'
-import { Clock, AlertCircle, AlertTriangle, CheckCircle, Stethoscope, ChevronDown } from 'lucide-react'
-import { obtenerTriajePorId, suscribirTriajes } from '@/services/supabase'
+import { Clock, AlertCircle, AlertTriangle, CheckCircle, Stethoscope, ChevronDown, Send, MessageSquare } from 'lucide-react'
+import { obtenerTriajePorId, suscribirTriajes, obtenerPosicionFila, actualizarNotasPaciente } from '@/services/supabase'
+import toast from 'react-hot-toast'
 import './PatientTicket.css'
 
 const PRIORITY_CONFIG = {
@@ -14,14 +15,38 @@ const PRIORITY_CONFIG = {
 export default function PatientTicket() {
   const { id } = useParams()
   const [ticket, setTicket] = useState(null)
+  const [posicionFila, setPosicionFila] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  
+  // Aura Chat state
+  const [chatOpen, setChatOpen] = useState(false)
+  const [chatInput, setChatInput] = useState('')
+  const [chatMessages, setChatMessages] = useState([
+    { role: 'assistant', text: 'Hola, soy Aura. Mientras esperas a ser llamado, ¿te gustaría contarme si eres alérgico a algún medicamento o si tu dolor ha aumentado?' }
+  ])
+  const [isSending, setIsSending] = useState(false)
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   useEffect(() => {
-    async function loadTicket() {
+    if (chatOpen) {
+      scrollToBottom()
+    }
+  }, [chatMessages, chatOpen])
+
+  useEffect(() => {
+    async function loadData() {
       try {
         const data = await obtenerTriajePorId(id)
         setTicket(data)
+        if (data && data.estado === 'en_espera') {
+          const pos = await obtenerPosicionFila(id)
+          setPosicionFila(pos)
+        }
       } catch (err) {
         console.error(err)
         setError('No pudimos encontrar tu ticket.')
@@ -29,28 +54,54 @@ export default function PatientTicket() {
         setLoading(false)
       }
     }
-    loadTicket()
+    loadData()
   }, [id])
 
   useEffect(() => {
     if (!id) return;
-    const canal = suscribirTriajes((payload) => {
-      // payload.new contains the updated row data
+    const canal = suscribirTriajes(async (payload) => {
+      // If our own ticket changed
       if (payload.new && String(payload.new.id) === String(id)) {
         setTicket(prev => {
-          // If state changed to "en_consulta" for the first time, vibrate!
           if (prev?.estado !== 'en_consulta' && payload.new.estado === 'en_consulta') {
-            if (navigator.vibrate) {
-              navigator.vibrate([500, 200, 500, 200, 1000]);
-            }
+            if (navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 1000]);
           }
           return { ...prev, ...payload.new }
         });
       }
+      // Re-calculate queue position on any triage change
+      if (ticket?.estado === 'en_espera') {
+        const pos = await obtenerPosicionFila(id)
+        setPosicionFila(pos)
+      }
     });
 
     return () => canal.unsubscribe();
-  }, [id])
+  }, [id, ticket?.estado])
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault()
+    if (!chatInput.trim() || isSending) return
+
+    const userMessage = chatInput.trim()
+    setChatInput('')
+    setChatMessages(prev => [...prev, { role: 'user', text: userMessage }])
+    setIsSending(true)
+
+    try {
+      await actualizarNotasPaciente(id, userMessage)
+      setTimeout(() => {
+        setChatMessages(prev => [...prev, { 
+          role: 'assistant', 
+          text: 'He guardado esa información en tu ficha clínica. El doctor lo sabrá antes de que entres.' 
+        }])
+        setIsSending(false)
+      }, 1000)
+    } catch (err) {
+      toast.error('No se pudo guardar el mensaje')
+      setIsSending(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -74,7 +125,6 @@ export default function PatientTicket() {
   const config = PRIORITY_CONFIG[ticket.prioridad] || PRIORITY_CONFIG.GENERAL
   const Icon = config.icon
 
-  // El QR para recepción puede contener el ID o los datos básicos
   const qrData = JSON.stringify({
     id: ticket.id,
     nombre: ticket.paciente_nombre,
@@ -82,7 +132,6 @@ export default function PatientTicket() {
     fecha: new Date(ticket.created_at).toLocaleString('es-CL'),
   })
 
-  // Generamos un número de turno pseudo-aleatorio basado en el ID para mantenerlo consistente
   const turnoNumber = ticket.id ? parseInt(ticket.id.toString().replace(/[^0-9]/g, '').slice(-3) || '0') + 1 : 42;
 
   if (ticket.estado === 'atendido') {
@@ -139,8 +188,10 @@ export default function PatientTicket() {
     )
   }
 
+  const isZen = ticket.especialidad_recomendada?.toLowerCase().includes('psico') || ticket.especialidad_recomendada?.toLowerCase().includes('psiqui')
+
   return (
-    <div className={`ticket-page ${(ticket.especialidad_recomendada?.toLowerCase().includes('psico') || ticket.especialidad_recomendada?.toLowerCase().includes('psiqui')) ? 'zen-page' : ''}`}>
+    <div className={`ticket-page ${isZen ? 'zen-page' : ''}`}>
       <div className="ticket-container fade-in-up">
         
         {/* Marca / Header */}
@@ -150,10 +201,10 @@ export default function PatientTicket() {
           <p>Ticket Digital</p>
         </div>
 
-        {/* Tarjeta Principal (Wallet Pass) */}
+        {/* Tarjeta Principal */}
         <div className="ticket-card">
           
-          {/* Sección Superior: Prioridad */}
+          {/* Header: Prioridad */}
           <div className="ticket-header" style={{ background: config.bg, borderColor: config.color }}>
             <Icon size={28} color={config.color} className={ticket.prioridad === 'URGENCIA' ? 'pulse-urgencia' : ''} />
             <div className="ticket-priority-info">
@@ -166,14 +217,29 @@ export default function PatientTicket() {
             </div>
           </div>
 
+          {/* Fila Progress (Smart Waiting Room) */}
+          <div className="queue-progress-bar">
+             <div className="queue-text">
+                {posicionFila === 0 
+                  ? <span>Eres el <strong>siguiente</strong> paciente</span> 
+                  : <span>Hay <strong>{posicionFila}</strong> {posicionFila === 1 ? 'paciente' : 'pacientes'} antes que tú</span>}
+             </div>
+             <div className="queue-track">
+                <div 
+                  className="queue-fill" 
+                  style={{ width: posicionFila === 0 ? '100%' : `${Math.max(10, 100 - (posicionFila * 15))}%`, background: config.color }} 
+                />
+             </div>
+          </div>
+
           <div className="ticket-cutout">
             <div className="cutout-left"></div>
             <div className="cutout-right"></div>
             <div className="cutout-line"></div>
           </div>
 
-          {/* Sección Media: Datos del Paciente o Modo Zen */}
-          {(ticket.especialidad_recomendada?.toLowerCase().includes('psico') || ticket.especialidad_recomendada?.toLowerCase().includes('psiqui')) ? (
+          {/* Body */}
+          {isZen ? (
             <div className="ticket-body zen-body">
               <h3 className="zen-title">Respiración Guiada</h3>
               <p className="zen-subtitle">Sigue el círculo para calmarte mientras esperas.</p>
@@ -196,9 +262,6 @@ export default function PatientTicket() {
                   borderRadius: '12px', textDecoration: 'none', fontWeight: '600',
                   transition: 'all 0.3s ease'
                 }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                  </svg>
                   Línea Prevención Suicidio (*4141)
                 </a>
               </div>
@@ -234,7 +297,7 @@ export default function PatientTicket() {
             <div className="cutout-line"></div>
           </div>
 
-          {/* Sección Inferior: Código QR */}
+          {/* Footer QR */}
           <div className="ticket-footer">
             <p className="qr-instructions">Muestra este código en recepción</p>
             <div className="qr-wrapper">
@@ -245,8 +308,50 @@ export default function PatientTicket() {
 
         </div>
 
-        {/* Scroll indicator o info adicional */}
-        <div className="ticket-bottom-info">
+        {/* Aura Assistant Chat */}
+        {!isZen && (
+          <div className={`aura-chat-widget ${chatOpen ? 'open' : ''}`}>
+            <button className="aura-chat-toggle" onClick={() => setChatOpen(!chatOpen)}>
+              <MessageSquare size={20} />
+              <span>{chatOpen ? 'Cerrar Chat Aura' : 'Hablar con Asistente Aura'}</span>
+            </button>
+            
+            {chatOpen && (
+              <div className="aura-chat-window fade-in-up">
+                <div className="aura-chat-messages">
+                  {chatMessages.map((msg, idx) => (
+                    <div key={idx} className={`chat-bubble ${msg.role}`}>
+                      {msg.role === 'assistant' && <div className="chat-avatar">⚕</div>}
+                      <p>{msg.text}</p>
+                    </div>
+                  ))}
+                  {isSending && (
+                    <div className="chat-bubble assistant">
+                      <div className="chat-avatar">⚕</div>
+                      <p className="typing-indicator"><span>.</span><span>.</span><span>.</span></p>
+                    </div>
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+                <form className="aura-chat-input" onSubmit={handleSendMessage}>
+                  <input 
+                    type="text" 
+                    placeholder="Escribe aquí..." 
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    disabled={isSending}
+                  />
+                  <button type="submit" disabled={isSending || !chatInput.trim()}>
+                    <Send size={18} />
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Share Button */}
+        <div className="ticket-bottom-info" style={{ marginTop: chatOpen ? '0' : '2rem' }}>
           <button 
             className="btn-share-whatsapp"
             onClick={() => {
@@ -258,7 +363,7 @@ export default function PatientTicket() {
               display: 'flex', alignItems: 'center', gap: '8px', padding: '12px 24px',
               background: '#25D366', color: 'white', border: 'none', borderRadius: '100px',
               fontWeight: '600', cursor: 'pointer', boxShadow: '0 4px 15px rgba(37, 211, 102, 0.4)',
-              marginBottom: '1rem', transition: 'transform 0.2s'
+              transition: 'transform 0.2s'
             }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -266,9 +371,6 @@ export default function PatientTicket() {
             </svg>
             Compartir con Familiares
           </button>
-          
-          <ChevronDown size={20} className="bounce" />
-          <p>Desliza para más detalles</p>
         </div>
 
       </div>
