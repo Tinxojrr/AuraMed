@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { Search, Clock, AlertCircle, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, RefreshCw, FileText } from 'lucide-react'
+import { Search, Clock, AlertCircle, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, RefreshCw, FileText, User, Calendar, Activity, Hash } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { obtenerTriajes, obtenerTriajesPorPaciente } from '@/services/supabase'
 import PageTransition from '@/components/ui/PageTransition' // <-- ¡Le agregué tu transición de página!
@@ -121,6 +121,63 @@ function TimelineItem({ triaje, isLast }) {
   )
 }
 
+function PatientProfileCard({ triajes }) {
+  if (!triajes || triajes.length === 0) return null
+  
+  const p = triajes[0] // Datos del paciente más reciente
+  const totalVisitas = triajes.length
+  
+  // Como vienen ordenados de más nuevo a más antiguo:
+  const ultimaVisita = new Date(triajes[0].created_at)
+  const primeraVisita = new Date(triajes[triajes.length - 1].created_at)
+
+  // Extraer iniciales
+  const iniciales = p.paciente_nombre ? p.paciente_nombre.substring(0, 2).toUpperCase() : 'NN'
+
+  return (
+    <div className="patient-profile-card fade-in-up">
+      <div className="profile-header">
+        <div className="profile-avatar">
+          {iniciales}
+        </div>
+        <div className="profile-info">
+          <h2>{p.paciente_nombre || 'Paciente Sin Nombre'}</h2>
+          <div className="profile-badges">
+            <span className="badge-rut"><Hash size={12} /> {p.paciente_rut || 'Sin RUT'}</span>
+            <span className="badge-edad"><User size={12} /> {p.paciente_edad ? `${p.paciente_edad} años` : 'Edad Desconocida'}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="profile-stats">
+        <div className="stat-box">
+          <Activity size={18} className="stat-icon-blue" />
+          <div className="stat-box-info">
+            <span className="s-label">Total Atenciones</span>
+            <span className="s-val">{totalVisitas}</span>
+          </div>
+        </div>
+        
+        <div className="stat-box">
+          <Calendar size={18} className="stat-icon-green" />
+          <div className="stat-box-info">
+            <span className="s-label">Primera Visita</span>
+            <span className="s-val">{primeraVisita.toLocaleDateString('es-CL')}</span>
+          </div>
+        </div>
+
+        <div className="stat-box">
+          <Clock size={18} className="stat-icon-purple" />
+          <div className="stat-box-info">
+            <span className="s-label">Última Visita</span>
+            <span className="s-val">{ultimaVisita.toLocaleDateString('es-CL')}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function History() {
   const [triajes,  setTriajes]  = useState([])
   const [loading,  setLoading]  = useState(true)
@@ -163,6 +220,10 @@ export default function History() {
       t.paciente_rut?.includes(busqueda)
     return matchFiltro && matchBusqueda
   })
+
+  // DETERMINAR MODO PACIENTE (Si la búsqueda arroja exactamente 1 RUT único)
+  const unicosRuts = [...new Set(triajesFiltrados.map(t => t.paciente_rut).filter(Boolean))]
+  const isPatientMode = busqueda.trim().length > 0 && unicosRuts.length === 1
 
   return (
     <PageTransition>
@@ -237,14 +298,23 @@ export default function History() {
             <span>{busqueda ? 'Intenta buscar con otro término' : 'Los expedientes aparecerán aquí al registrarse'}</span>
           </div>
         ) : (
-          <div className="timeline">
-            {triajesFiltrados.map((t, i) => (
-              <TimelineItem
-                key={t.id}
-                triaje={t}
-                isLast={i === triajesFiltrados.length - 1}
-              />
-            ))}
+          <div className="timeline-container">
+            {isPatientMode && (
+              <div style={{ marginBottom: '30px' }}>
+                <PatientProfileCard triajes={triajesFiltrados} />
+                <h3 className="timeline-patient-title">Evolución Clínica Histórica</h3>
+              </div>
+            )}
+            
+            <div className="timeline">
+              {triajesFiltrados.map((t, i) => (
+                <TimelineItem
+                  key={t.id}
+                  triaje={t}
+                  isLast={i === triajesFiltrados.length - 1}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>
