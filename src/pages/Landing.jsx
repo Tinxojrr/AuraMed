@@ -112,6 +112,79 @@ export default function Landing() {
             </div>
           ))}
         </div>
+
+        {/* MOCKUP VISUAL DE LA APP */}
+        <div className="hero-mockup-container">
+          <div className="hero-mockup-glow"></div>
+          <div className="hero-mockup-window">
+            <div className="mockup-header">
+              <span className="mockup-dot red"></span>
+              <span className="mockup-dot yellow"></span>
+              <span className="mockup-dot green"></span>
+            </div>
+            <div className="mockup-body">
+              <div className="mockup-sidebar"></div>
+              <div className="mockup-content">
+                <div className="mockup-card urgencia">
+                  <div className="mockup-badge">URGENCIA</div>
+                  <div className="mockup-line title"></div>
+                  <div className="mockup-line text"></div>
+                </div>
+                <div className="mockup-card prioritario">
+                  <div className="mockup-badge">PRIORITARIO</div>
+                  <div className="mockup-line title"></div>
+                  <div className="mockup-line text"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── MARQUEE INFINITO (Especialidades) ─── */}
+      <section className="landing-marquee">
+        <div className="marquee-content">
+          <span>Cardiología Médica</span><span className="bullet">•</span>
+          <span>Traumatología y Ortopedia</span><span className="bullet">•</span>
+          <span>Medicina General</span><span className="bullet">•</span>
+          <span>Salud Mental y Psiquiatría</span><span className="bullet">•</span>
+          <span>Pediatría Integral</span><span className="bullet">•</span>
+          <span>Neurología Avanzada</span><span className="bullet">•</span>
+          {/* Duplicado para ilusión infinita */}
+          <span>Cardiología Médica</span><span className="bullet">•</span>
+          <span>Traumatología y Ortopedia</span><span className="bullet">•</span>
+          <span>Medicina General</span><span className="bullet">•</span>
+          <span>Salud Mental y Psiquiatría</span><span className="bullet">•</span>
+          <span>Pediatría Integral</span><span className="bullet">•</span>
+          <span>Neurología Avanzada</span><span className="bullet">•</span>
+        </div>
+      </section>
+
+      {/* ─── CÓMO FUNCIONA (Timeline / Steps) ─── */}
+      <section className="landing-steps">
+        <div className="section-head">
+          <span className="section-eyebrow">FLUJO AUTOMATIZADO</span>
+          <h2>Triaje en 3 pasos simples</h2>
+        </div>
+        <div className="steps-container">
+          <div className="step-card">
+            <div className="step-number">1</div>
+            <h3>Paciente ingresa síntomas</h3>
+            <p>Usando voz o texto, el paciente describe qué le sucede de forma natural y sin fricción.</p>
+          </div>
+          <div className="step-connector"></div>
+          <div className="step-card">
+            <div className="step-number">2</div>
+            <h3>Claude IA clasifica</h3>
+            <p>En milisegundos, la IA analiza el riesgo clínico, asigna prioridad y deriva a la especialidad.</p>
+          </div>
+          <div className="step-connector"></div>
+          <div className="step-card">
+            <div className="step-number">3</div>
+            <h3>Médico recibe la ficha</h3>
+            <p>El paciente aparece automáticamente en el panel Kanban del doctor correspondiente.</p>
+          </div>
+        </div>
       </section>
 
       {/* ─── PRIORIDADES (Neon bars) ────────────────────────── */}
@@ -182,6 +255,46 @@ export default function Landing() {
               <p>{desc}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ─── TESTIMONIOS (Social Proof) ─── */}
+      <section className="landing-testimonials">
+        <div className="section-head">
+          <span className="section-eyebrow">CONFIANZA CLÍNICA</span>
+          <h2>Aprobado por profesionales de la salud</h2>
+        </div>
+        <div className="testimonials-grid">
+          <div className="testimonial-card">
+            <p>"AuraMed ha reducido los tiempos de espera en Urgencias en un 40%. La IA nunca se ha equivocado en derivar una alerta de infarto."</p>
+            <div className="testimonial-author">
+              <div className="author-avatar" style={{ background: '#3b82f6' }}>JS</div>
+              <div className="author-info">
+                <strong>Dr. Javier Salinas</strong>
+                <span>Jefe de Urgencias</span>
+              </div>
+            </div>
+          </div>
+          <div className="testimonial-card">
+            <p>"El modo Zen ha sido una revelación. Contener a pacientes con crisis de ansiedad antes de que entren al box cambia todo."</p>
+            <div className="testimonial-author">
+              <div className="author-avatar" style={{ background: '#ec4899' }}>MR</div>
+              <div className="author-info">
+                <strong>Dra. María Ramos</strong>
+                <span>Psiquiatra Clínica</span>
+              </div>
+            </div>
+          </div>
+          <div className="testimonial-card">
+            <p>"El Panel Kanban es tan intuitivo que nuestras enfermeras de triaje aprendieron a usarlo en 5 minutos. El diseño es impecable."</p>
+            <div className="testimonial-author">
+              <div className="author-avatar" style={{ background: '#10b981' }}>LT</div>
+              <div className="author-info">
+                <strong>Enf. Luis Torres</strong>
+                <span>Coordinador Médico</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

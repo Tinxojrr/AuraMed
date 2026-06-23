@@ -552,3 +552,250 @@
 .wellness-content p { color: var(--text-secondary); line-height: 1.6; max-width: 600px; margin: 0 auto 2rem; }
 .btn-wellness { background: linear-gradient(90deg, #ec4899, #8b5cf6); color: white; border: none; padding: 14px 32px; border-radius: 100px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 20px rgba(236, 72, 153, 0.3); }
 .btn-wellness:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(236, 72, 153, 0.4); }
+
+/* ==========================================
+   NUEVAS SECCIONES VISUALES
+   ========================================== */
+
+/* MOCKUP FLOTANTE (Debajo de los stats) */
+.hero-mockup-container {
+  margin-top: 60px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.hero-mockup-glow {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%; height: 80%;
+  background: var(--color-primary);
+  filter: blur(100px);
+  opacity: 0.15;
+  z-index: 0;
+}
+
+.hero-mockup-window {
+  width: 100%;
+  max-width: 800px;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transform: rotateX(10deg);
+  transform-origin: top;
+  z-index: 1;
+  backdrop-filter: blur(20px);
+}
+
+.landing.light .hero-mockup-window {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+.mockup-header {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+}
+.landing.light .mockup-header {
+  background: #F1F5F9;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mockup-dot.red { background: #ef4444; }
+.mockup-dot.yellow { background: #f59e0b; }
+.mockup-dot.green { background: #10b981; }
+
+.mockup-body {
+  display: flex;
+  height: 250px;
+}
+
+.mockup-sidebar {
+  width: 20%;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+}
+.landing.light .mockup-sidebar {
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  background: #F8FAFC;
+}
+
+.mockup-content {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 19px,
+    rgba(255, 255, 255, 0.02) 20px
+  );
+}
+.landing.light .mockup-content {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 19px,
+    rgba(0, 0, 0, 0.02) 20px
+  );
+}
+
+.mockup-card {
+  width: 45%;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  border-left: 3px solid;
+  animation: pulseMockup 4s infinite alternate;
+}
+.landing.light .mockup-card {
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.mockup-card.urgencia { border-left-color: #ef4444; }
+.mockup-card.prioritario { border-left-color: #f59e0b; }
+
+.mockup-badge {
+  font-size: 8px; font-weight: 700;
+  padding: 2px 6px; border-radius: 4px;
+  display: inline-block; margin-bottom: 8px;
+}
+.mockup-card.urgencia .mockup-badge { background: #FEF2F2; color: #ef4444; }
+.mockup-card.prioritario .mockup-badge { background: #FFFBEB; color: #f59e0b; }
+
+.mockup-line { height: 6px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); margin-bottom: 8px; }
+.landing.light .mockup-line { background: #E2E8F0; }
+.mockup-line.title { width: 60%; }
+.mockup-line.text { width: 90%; }
+
+@keyframes pulseMockup {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-3px); }
+}
+
+/* MARQUEE INFINITO */
+.landing-marquee {
+  width: 100%;
+  overflow: hidden;
+  background: rgba(26, 111, 212, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px 0;
+  margin-bottom: 80px;
+}
+.landing.light .landing-marquee {
+  background: #EFF6FF;
+  border-color: rgba(59, 130, 246, 0.1);
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: scrollMarquee 25s linear infinite;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.marquee-content .bullet { margin: 0 32px; color: rgba(26, 111, 212, 0.3); }
+
+@keyframes scrollMarquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* Debe ser exactamente la mitad si está duplicado */
+}
+
+/* CÓMO FUNCIONA (Pasos) */
+.landing-steps {
+  max-width: 1100px; margin: 0 auto 120px;
+  padding: 0 2rem; position: relative; z-index: 10;
+}
+
+.steps-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.step-card {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.step-number {
+  width: 50px; height: 50px;
+  background: linear-gradient(135deg, var(--color-primary), #6366f1);
+  color: white; font-size: 1.25rem; font-weight: 800;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow: 0 10px 20px rgba(26, 111, 212, 0.3);
+}
+
+.step-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary); }
+.step-card p { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; }
+
+.step-connector {
+  flex-shrink: 0;
+  width: 80px; height: 2px;
+  background: repeating-linear-gradient(90deg, var(--color-primary) 0, var(--color-primary) 4px, transparent 4px, transparent 8px);
+  opacity: 0.3;
+  margin-top: 25px;
+}
+
+@media (max-width: 768px) {
+  .steps-container { flex-direction: column; align-items: center; gap: 40px; }
+  .step-connector { width: 2px; height: 40px; background: repeating-linear-gradient(180deg, var(--color-primary) 0, var(--color-primary) 4px, transparent 4px, transparent 8px); margin: 0; }
+}
+
+/* TESTIMONIOS */
+.landing-testimonials {
+  max-width: 1100px; margin: 0 auto 120px;
+  padding: 0 2rem; position: relative; z-index: 10;
+}
+
+.testimonials-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+
+.testimonial-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px; padding: 32px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.landing.light .testimonial-card {
+  background: white; border-color: rgba(0,0,0,0.06); box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.testimonial-card p {
+  font-size: 1.05rem; font-style: italic; color: var(--text-primary);
+  line-height: 1.6; margin-bottom: 24px;
+}
+
+.testimonial-author { display: flex; align-items: center; gap: 12px; }
+
+.author-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  color: white; font-weight: 700; font-size: 0.9rem;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.author-info strong { display: block; font-size: 0.95rem; color: var(--text-primary); }
+.author-info span { font-size: 0.8rem; color: var(--text-muted); }
