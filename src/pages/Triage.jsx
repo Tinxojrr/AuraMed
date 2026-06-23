@@ -6,6 +6,7 @@ import AIScanner      from '@/components/shared/AIScanner'
 import TriageResult   from '@/components/shared/TriageResult'
 import EVAScale       from '@/components/shared/EVAScale'
 import RedFlags, { evaluarRedFlags } from '@/components/shared/RedFlags'
+import VoiceButton from '@/components/shared/VoiceButton'
 import { evaluarTriaje, chatTriaje } from '@/services/claude'
 import { crearTriaje } from '@/services/supabase'
 import './Triage.css'
@@ -87,7 +88,12 @@ function ModoDirecto({ paciente, setPaciente, sintomas, setSintomas, zonas, setZ
 
           {/* Síntomas */}
           <div className="form-card">
-            <div className="card-title-static"><FileText size={16} /> Descripción de síntomas *</div>
+            <div className="card-title-static" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <FileText size={16} /> Descripción de síntomas *
+              </span>
+              <VoiceButton onTranscript={(text) => setSintomas(prev => prev ? prev + ' ' + text : text)} />
+            </div>
             <textarea className="symptoms-textarea"
               placeholder="Describe con tus propias palabras qué sientes. Por ejemplo: 'Tengo dolor fuerte en el pecho desde hace 2 horas, me cuesta respirar...'"
               value={sintomas} onChange={e => setSintomas(e.target.value)} rows={5} required />
@@ -248,6 +254,7 @@ function ModoChat({ paciente, setPaciente, zonas, setZonas,
                 <input type="text" className="chat-input" placeholder="Escribe tu respuesta..."
                   value={input} onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && enviarMensaje()} disabled={loading} />
+                <VoiceButton onTranscript={(text) => setInput(prev => prev ? prev + ' ' + text : text)} />
                 <button className="chat-send" onClick={enviarMensaje} disabled={loading || !input.trim()}>
                   <Send size={16} />
                 </button>
