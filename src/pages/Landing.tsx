@@ -226,7 +226,7 @@ export default function Landing() {
             <div
               className="feature-card"
               key={title}
-              style={{ '--feature-color': color }}
+              style={{ '--feature-color': color } as React.CSSProperties}
             >
               <div className="feature-card-border" />
               <div className="feature-icon" style={{ color }}>

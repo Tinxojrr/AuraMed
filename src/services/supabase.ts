@@ -210,7 +210,7 @@ export async function obtenerEspecialidades(): Promise<Especialidad[]> {
 
 // ─── Realtime: escuchar cambios en triajes ────────────────────────────────────
 
-export function suscribirTriajes(callback: () => void): RealtimeChannel {
+export function suscribirTriajes(callback: (payload: any) => void): RealtimeChannel {
   return supabase
     .channel('triajes-cambios')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'triajes' }, callback)

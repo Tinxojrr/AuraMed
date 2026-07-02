@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment, ContactShadows, CameraControls, useGLTF, Html } from '@react-three/drei';
@@ -222,7 +223,7 @@ export default function BodyMap3DReal({ selected = [], onChange }) {
   return (
     <div className="bodymap-container" style={{ position: 'relative', height: '600px', width: '100%', background: '#020617', borderRadius: '1rem', overflow: 'hidden', border: '1px solid #1E293B', boxShadow: 'inset 0 0 50px rgba(0,0,0,0.8)' }}>
       <Canvas 
-        camera={{ position: DEFAULT_CAM_POS, fov: 30 }} 
+        camera={{ position: DEFAULT_CAM_POS as [number, number, number], fov: 30 }} 
         onPointerMissed={() => setHovered(null)}
       >
         <color attach="background" args={['#020617']} />

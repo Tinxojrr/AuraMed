@@ -57,7 +57,7 @@ export default function Kiosco() {
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', margin: '0.25rem 0 0 0' }}>Terminal de auto-atención de Urgencias</p>
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', display: window.innerWidth > 768 ? 'flex' : 'none' }}>
+        <div style={{ flexDirection: 'column', alignItems: 'flex-end', display: window.innerWidth > 768 ? 'flex' : 'none' }}>
           <span style={{
             padding: '0.375rem 1rem', borderRadius: '9999px', backgroundColor: 'rgba(16, 185, 129, 0.1)',
             color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.2)', fontSize: '0.875rem', fontWeight: 500

@@ -17,7 +17,7 @@ const EMOCIONES = [
   { id: 'angustia', label: 'Angustia / Ahogo', color: '#06b6d4' }, // Cyan
 ]
 
-export default function MentalTriage({ onResultado }) {
+export default function MentalTriage({ onResultado }: { onResultado?: any }) {
   const navigate = useNavigate()
   const [paciente, setPaciente] = useState({ nombre: '', rut: '', edad: '', genero: '', email: '' })
   const [showDatos, setShowDatos] = useState(true)
@@ -100,7 +100,7 @@ export default function MentalTriage({ onResultado }) {
         recomendaciones: resultado.recomendaciones,
         preguntas_seguimiento: resultado.preguntas_seguimiento,
         nivel_confianza: resultado.nivel_confianza,
-        tiempo_espera_estimado: parseInt(resultado.tiempo_espera_estimado) || 15,
+        tiempo_espera_estimado: parseInt(String(resultado.tiempo_espera_estimado)) || 15,
       })
 
       // Enviar correo si el paciente dejó un email
@@ -171,9 +171,9 @@ export default function MentalTriage({ onResultado }) {
               <div className="field-row" style={{ marginTop: '1rem' }}>
                 <div className="field">
                   <label>RUT (Opcional)</label>
-                  <input type="text" placeholder="12.345.678-9" maxLength="12"
-                    value={paciente.rut} onChange={e => setPaciente(p => ({ ...p, rut: formatRUT(e.target.value) }))} />
-                </div>
+                  <input type="text" placeholder="Ej: 12.345.678-9" maxLength={12}
+                  value={paciente.rut} onChange={e => setPaciente(p => ({ ...p, rut: formatRUT(e.target.value) }))}
+                /></div>
                 <div className="field">
                   <label>Edad</label>
                   <input type="number" placeholder="Años" min="0" max="120"

@@ -44,7 +44,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 function StatCard({ icon: Icon, label, value, color, sublabel }) {
   return (
-    <div className="stat-card-dash" style={{ '--card-accent': color }}>
+    <div className="stat-card-dash" style={{ '--card-accent': color } as React.CSSProperties}>
       <div className="stat-icon" style={{ background: `${color}15`, color }}>
         <Icon size={22} />
       </div>
@@ -159,7 +159,7 @@ export default function Dashboard() {
   // ─── MAGIA 1: Datos para el Radar de Precisión IA ───
   const radarData = useMemo(() => {
     if (!triajes.length) return []
-    const radarStats = {}
+    const radarStats: Record<string, { name: string; total: number; confianzaAcumulada: number }> = {}
     
     triajes.forEach(t => {
       if (!t.especialidad_recomendada) return
@@ -337,8 +337,8 @@ export default function Dashboard() {
                   <Tooltip content={<CustomTooltip />} />
                   <Bar 
                     dataKey="value" name="Derivaciones" 
-                    fill="#3B82F6" radius={[0, 6, 6, 0]}
-                    background={{ fill: 'var(--bg-page)', radius: [0, 6, 6, 0] }}
+                    fill="#3B82F6" radius={6}
+                    background={{ fill: 'var(--bg-page)', radius: 6 }}
                   />
                 </BarChart>
               </ResponsiveContainer>
@@ -427,9 +427,9 @@ export default function Dashboard() {
                   <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
                   
                   {/* Aquí está la magia del apilado (stacked bar) */}
-                  <Bar dataKey="URGENCIA" name="Urgencia" stackId="a" fill="#EF4444" radius={[0, 0, 4, 4]} />
+                  <Bar dataKey="URGENCIA" name="Urgencia" stackId="a" fill="#EF4444" radius={4} />
                   <Bar dataKey="PRIORITARIO" name="Prioritario" stackId="a" fill="#F59E0B" />
-                  <Bar dataKey="GENERAL" name="General" stackId="a" fill="#10B981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="GENERAL" name="General" stackId="a" fill="#10B981" radius={4} />
                 </BarChart>
               </ResponsiveContainer>
             ) : <div className="chart-empty">Segmentando población...</div>}

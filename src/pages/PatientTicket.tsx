@@ -59,7 +59,7 @@ export default function PatientTicket() {
 
   useEffect(() => {
     if (!id) return;
-    const canal = suscribirTriajes(async (payload: any) => {
+    const canal = suscribirTriajes(async (payload) => {
       // If our own ticket changed
       if (payload.new && String(payload.new.id) === String(id)) {
         setTicket(prev => {

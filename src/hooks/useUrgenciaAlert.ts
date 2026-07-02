@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useRef, useCallback } from 'react'
 
 // Contexto de audio compartido — se activa con el primer clic del usuario

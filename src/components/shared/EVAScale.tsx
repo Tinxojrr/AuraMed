@@ -48,7 +48,7 @@ export default function EVAScale({ value, onChange }) {
           value={value}
           onChange={e => onChange(parseInt(e.target.value))}
           className="eva-slider"
-          style={{ '--thumb-color': config.color, '--fill': `${value * 10}%` }}
+          style={{ '--thumb-color': config.color, '--fill': `${value * 10}%` } as React.CSSProperties}
         />
         <div className="eva-ticks">
           {Array.from({ length: 11 }, (_, i) => (

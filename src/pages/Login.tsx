@@ -193,7 +193,7 @@ export default function Login() {
               className="honey-trap" 
               value={honeypot} 
               onChange={e => setHoneypot(e.target.value)} 
-              tabIndex="-1" 
+              tabIndex={-1} 
               autoComplete="off" 
             />
 
@@ -216,7 +216,7 @@ export default function Login() {
                   onMouseLeave={() => setShowPassword(false)}
                   onTouchStart={() => setShowPassword(true)}
                   onTouchEnd={() => setShowPassword(false)}
-                  tabIndex="-1"
+                  tabIndex={-1}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>

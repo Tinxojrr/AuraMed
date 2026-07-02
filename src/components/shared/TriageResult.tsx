@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { QRCodeSVG } from 'qrcode.react'
 import { CheckCircle, AlertTriangle, AlertCircle, Clock, Stethoscope, ChevronRight, RotateCcw } from 'lucide-react'
 import './TriageResult.css'

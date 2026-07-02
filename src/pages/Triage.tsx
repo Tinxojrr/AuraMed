@@ -67,7 +67,7 @@ function ModoDirecto({
                   </div>
                   <div className="field">
                     <label>RUT</label>
-                    <input type="text" placeholder="12.345.678-9" maxLength="12"
+                    <input type="text" placeholder="12.345.678-9" maxLength={12}
                       value={paciente.rut} onChange={e => setPaciente(p => ({ ...p, rut: formatRUT(e.target.value) }))} />
                   </div>
                 </div>
@@ -142,7 +142,7 @@ function ModoDirecto({
 
 function ModoChat({ paciente, setPaciente, vitals, setVitals, zonas, setZonas,
                     evaScore, setEvaScore, redFlags, setRedFlags, onResultado }) {
-  const [messages,   setMessages]   = useState([{
+  const [messages,   setMessages]   = useState<{role: 'assistant' | 'user', content: string}[]>([{
     role: 'assistant',
     content: '¡Hola! Soy AuraMed. Para ayudarte mejor, cuéntame: ¿cuál es el síntoma principal que te trae hoy?',
   }])
@@ -204,7 +204,7 @@ function ModoChat({ paciente, setPaciente, vitals, setVitals, zonas, setZonas,
         resumen_clinico: resultado.resumen, recomendaciones: resultado.recomendaciones,
         preguntas_seguimiento: resultado.preguntas_seguimiento,
         nivel_confianza: resultado.nivel_confianza,
-        tiempo_espera_estimado: parseInt(resultado.tiempo_espera_estimado) || 30,
+        tiempo_espera_estimado: parseInt(String(resultado.tiempo_espera_estimado)) || 30,
       })
       onResultado({ ...resultado, id: triajeGuardado.id, numero_turno: triajeGuardado.numero_turno })
     } catch (err) {
@@ -231,7 +231,7 @@ function ModoChat({ paciente, setPaciente, vitals, setVitals, zonas, setZonas,
               </div>
               <div className="field">
                 <label>RUT</label>
-                <input type="text" placeholder="12.345.678-9" maxLength="12"
+                <input type="text" placeholder="12.345.678-9" maxLength={12}
                   value={paciente.rut} onChange={e => setPaciente(p => ({ ...p, rut: formatRUT(e.target.value) }))} />
               </div>
               <div className="field">
@@ -302,7 +302,7 @@ function ModoChat({ paciente, setPaciente, vitals, setVitals, zonas, setZonas,
 }
 
 // ─── Página principal ──────────────────────────────────────
-export default function Triage() {
+export default function Triage({ onResultado }: { onResultado?: any }) {
   const [modo,       setModo]       = useState('directo')
   const [paciente,   setPaciente]   = useState(INITIAL_PACIENTE)
   const [vitals,     setVitals]     = useState(INITIAL_VITALS)
@@ -331,7 +331,7 @@ export default function Triage() {
         especialidad_recomendada: 'Medicina General',
         resumen_clinico: `Urgencia directa por: ${evaluacion.razon}`,
         recomendaciones: ['Atención médica inmediata', 'No esperar en sala de espera general'],
-        nivel_confianza: 1.0, tiempo_espera_estimado: '0',
+        nivel_confianza: 1.0, tiempo_espera_estimado: 0,
       }).catch(console.error)
       setUrgDirecta(evaluacion.razon)
       return
@@ -365,7 +365,7 @@ export default function Triage() {
         resumen_clinico: iaResult.resumen, recomendaciones: iaResult.recomendaciones,
         preguntas_seguimiento: iaResult.preguntas_seguimiento,
         nivel_confianza: iaResult.nivel_confianza,
-        tiempo_espera_estimado: parseInt(iaResult.tiempo_espera_estimado) || 30,
+        tiempo_espera_estimado: parseInt(String(iaResult.tiempo_espera_estimado)) || 30,
       })
       setResult({ ...iaResult, id: triajeGuardado.id, numero_turno: triajeGuardado.numero_turno })
       toast.success('Triaje completado')

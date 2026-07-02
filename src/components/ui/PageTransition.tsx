@@ -1,3 +1,4 @@
+import React from 'react'
 import { motion } from 'framer-motion'
 
 const variants = {
@@ -6,7 +7,7 @@ const variants = {
   exit:    { opacity: 0, y: -10 },
 }
 
-export default function PageTransition({ children, delay = 0 }) {
+export default function PageTransition({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) {
   return (
     <motion.div
       initial="hidden"
@@ -21,7 +22,7 @@ export default function PageTransition({ children, delay = 0 }) {
 }
 
 // Para animar listas de items uno por uno
-export function StaggerList({ children, className }) {
+export function StaggerList({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
     <motion.div
       className={className}
@@ -36,7 +37,7 @@ export function StaggerList({ children, className }) {
   )
 }
 
-export function StaggerItem({ children, className }) {
+export function StaggerItem({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
     <motion.div
       className={className}
