@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Activity, Users, AlertCircle, Clock, TrendingUp, RefreshCw, Radio, Download } from 'lucide-react'
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, AreaChart, Area, CartesianGrid,
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Legend
 } from 'recharts'
+import { useQuery } from '@tanstack/react-query'
 import { obtenerEstadisticas, obtenerTriajes, suscribirTriajes } from '@/services/supabase'
 import PageTransition, { StaggerList, StaggerItem } from '@/components/ui/PageTransition'
 import { SkeletonStatCard, SkeletonChart } from '@/components/ui/Skeleton'
@@ -58,39 +59,39 @@ function StatCard({ icon: Icon, label, value, color, sublabel }) {
 }
 
 export default function Dashboard() {
-  const [stats, setStats]           = useState(null)
-  const [triajes, setTriajes]       = useState([])
-  const [loading, setLoading]       = useState(true)
-  const [isRefreshing, setIsRef]    = useState(false)
-  const [lastUpdate, setLastUpdate] = useState(new Date())
-  const [rango, setRango]           = useState('todos')
+  const [rango, setRango] = useState('todos')
+  const [isRefreshing, setIsRef] = useState(false)
 
-  const cargarDatos = useCallback(async () => {
-    setIsRef(true)
-    try {
+  const { data, isLoading: loading, error, refetch } = useQuery({
+    queryKey: ['dashboard', rango],
+    queryFn: async () => {
       const [statsData, triagesData] = await Promise.all([
         obtenerEstadisticas(rango),
         obtenerTriajes(2000, rango),
       ])
-      setStats(statsData)
-      setTriajes(triagesData)
-      setLastUpdate(new Date())
-    } catch (err) {
-      toast.error('Error sincronizando el dashboard')
-    } finally {
-      setLoading(false)
-      setTimeout(() => setIsRef(false), 600) // Para que la animación de giro se aprecie
-    }
-  }, [rango])
+      return { stats: statsData, triajes: triagesData }
+    },
+    refetchInterval: 30000, // Automáticamente hace refetch cada 30 seg
+  })
 
+  const stats = data?.stats
+  const triajes = data?.triajes || []
+  const lastUpdate = new Date() // Como usamos react query, el momento de refetch es el momento actual.
+
+  // Realtime
   useEffect(() => {
-    cargarDatos()
     const canal = suscribirTriajes(() => {
-      cargarDatos()
+      refetch()
       toast.success('Nuevo paciente ingresado', { id: 'live-update', duration: 2000, icon: '⚡' })
     })
     return () => canal.unsubscribe()
-  }, [cargarDatos])
+  }, [refetch])
+
+  const cargarDatos = async () => {
+    setIsRef(true)
+    await refetch()
+    setTimeout(() => setIsRef(false), 600)
+  }
 
   const exportarCSV = () => {
     if (!triajes.length) {
