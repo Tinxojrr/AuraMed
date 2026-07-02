@@ -33,13 +33,13 @@ export default function FamilyTracker() {
 
   useEffect(() => {
     if (!id) return;
-    const canal = suscribirTriajes((payload) => {
+    const canal = suscribirTriajes((payload: any) => {
       if (payload.new && String(payload.new.id) === String(id)) {
         setTicket(prev => ({ ...prev, ...payload.new }))
       }
     });
 
-    return () => canal.unsubscribe();
+    return () => { canal.unsubscribe() };
   }, [id])
 
   if (loading) {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { User, FileText, Send, ChevronDown, ChevronUp, MessageSquare, Zap, AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
-import BodyMap        from '@/components/shared/BodyMap'
+import BodyMap        from '@/components/shared/BodyMap3DReal'
 import AIScanner      from '@/components/shared/AIScanner'
 import TriageResult   from '@/components/shared/TriageResult'
 import EVAScale       from '@/components/shared/EVAScale'
@@ -11,15 +11,10 @@ import { evaluarTriaje, chatTriaje } from '@/services/claude'
 import { crearTriaje } from '@/services/supabase'
 import './Triage.css'
 
-const INITIAL_PACIENTE = { nombre: '', rut: '', edad: '', genero: '' }
+import { formatRUT, validateRUT } from '@/utils/rut'
 
-const formatRUT = (value) => {
-  let rut = value.replace(/[^0-9kK]/g, '').toUpperCase()
-  if (rut.length <= 1) return rut
-  const dv = rut.slice(-1)
-  const body = rut.slice(0, -1)
-  return body.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "-" + dv
-}
+const INITIAL_PACIENTE = { nombre: '', rut: '', edad: '', genero: '' }
+const INITIAL_VITALS = { hr: '', bp: '', temp: '', spo2: '' }
 
 // ─── Resultado de urgencia directa (sin llamar a la IA) ────
 function UrgenciaDirecta({ paciente, razon, onReset }) {
@@ -40,8 +35,15 @@ function UrgenciaDirecta({ paciente, razon, onReset }) {
 }
 
 // ─── Modo directo ──────────────────────────────────────────
-function ModoDirecto({ paciente, setPaciente, sintomas, setSintomas, zonas, setZonas,
-                       evaScore, setEvaScore, redFlags, setRedFlags, onSubmit, loading }) {
+function ModoDirecto({ 
+  paciente, setPaciente, 
+  vitals, setVitals,
+  sintomas, setSintomas, 
+  zonas, setZonas, 
+  evaScore, setEvaScore, 
+  redFlags, setRedFlags, 
+  onSubmit, loading 
+}) {
   const [showPaciente, setShowPaciente] = useState(true)
 
   return (
@@ -138,8 +140,7 @@ function ModoDirecto({ paciente, setPaciente, sintomas, setSintomas, zonas, setZ
   )
 }
 
-// ─── Modo chat ─────────────────────────────────────────────
-function ModoChat({ paciente, setPaciente, zonas, setZonas,
+function ModoChat({ paciente, setPaciente, vitals, setVitals, zonas, setZonas,
                     evaScore, setEvaScore, redFlags, setRedFlags, onResultado }) {
   const [messages,   setMessages]   = useState([{
     role: 'assistant',
@@ -152,7 +153,7 @@ function ModoChat({ paciente, setPaciente, zonas, setZonas,
 
   const enviarMensaje = async () => {
     if (!input.trim() || loading) return
-    const nuevosMensajes = [...messages, { role: 'user', content: input }]
+    const nuevosMensajes = [...messages, { role: 'user' as const, content: input }]
     setMessages(nuevosMensajes)
     setInput('')
     setLoading(true)
@@ -173,15 +174,24 @@ function ModoChat({ paciente, setPaciente, zonas, setZonas,
 
   const generarDiagnostico = async () => {
     if (!paciente.nombre.trim()) { toast.error('Ingresa el nombre del paciente'); return }
+    if (paciente.rut && !validateRUT(paciente.rut)) { toast.error('El RUT ingresado no es válido'); return }
     setLoading(true)
     try {
       const conversacion = messages.filter(m => m.role === 'user').map(m => m.content).join('. ')
+      const infoVitals = [
+        vitals.hr && `FC: ${vitals.hr} lpm`,
+        vitals.bp && `PA: ${vitals.bp}`,
+        vitals.temp && `Temp: ${vitals.temp}°C`,
+        vitals.spo2 && `SpO2: ${vitals.spo2}%`
+      ].filter(Boolean).join(', ')
+
       const contexto = [
         paciente.edad   && `Edad: ${paciente.edad} años`,
         paciente.genero && `Género: ${paciente.genero}`,
         zonas.length    && `Zonas afectadas: ${zonas.join(', ')}`,
         `Dolor EVA: ${evaScore}/10`,
         redFlags.length && `Factores de riesgo: ${redFlags.join(', ')}`,
+        infoVitals.length > 0 && `Constantes: ${infoVitals}`
       ].filter(Boolean).join(' | ')
 
       const resultado = await evaluarTriaje(conversacion, contexto)
@@ -295,6 +305,7 @@ function ModoChat({ paciente, setPaciente, zonas, setZonas,
 export default function Triage() {
   const [modo,       setModo]       = useState('directo')
   const [paciente,   setPaciente]   = useState(INITIAL_PACIENTE)
+  const [vitals,     setVitals]     = useState(INITIAL_VITALS)
   const [sintomas,   setSintomas]   = useState('')
   const [zonas,      setZonas]      = useState([])
   const [evaScore,   setEvaScore]   = useState(0)
@@ -307,6 +318,7 @@ export default function Triage() {
     e.preventDefault()
     if (!sintomas.trim()) { toast.error('Describe los síntomas del paciente'); return }
     if (!paciente.nombre.trim()) { toast.error('Ingresa el nombre del paciente'); return }
+    if (paciente.rut && !validateRUT(paciente.rut)) { toast.error('El RUT ingresado no es válido'); return }
 
     // ── Cortocircuito: Red Flag + síntoma crítico → Urgencia directa
     const evaluacion = evaluarRedFlags(redFlags, sintomas, evaScore)
@@ -319,7 +331,7 @@ export default function Triage() {
         especialidad_recomendada: 'Medicina General',
         resumen_clinico: `Urgencia directa por: ${evaluacion.razon}`,
         recomendaciones: ['Atención médica inmediata', 'No esperar en sala de espera general'],
-        nivel_confianza: 1.0, tiempo_espera_estimado: 0,
+        nivel_confianza: 1.0, tiempo_espera_estimado: '0',
       }).catch(console.error)
       setUrgDirecta(evaluacion.razon)
       return
@@ -327,12 +339,20 @@ export default function Triage() {
 
     setLoading(true)
     try {
+      const infoVitals = [
+        vitals.hr && `FC: ${vitals.hr} lpm`,
+        vitals.bp && `PA: ${vitals.bp}`,
+        vitals.temp && `Temp: ${vitals.temp}°C`,
+        vitals.spo2 && `SpO2: ${vitals.spo2}%`
+      ].filter(Boolean).join(', ')
+
       const contexto = [
         paciente.edad   && `Edad: ${paciente.edad} años`,
         paciente.genero && `Género: ${paciente.genero}`,
         zonas.length    && `Zonas afectadas: ${zonas.join(', ')}`,
         `Dolor EVA: ${evaScore}/10`,
         redFlags.length && `Factores de riesgo: ${redFlags.join(', ')}`,
+        infoVitals.length > 0 && `Constantes: ${infoVitals}`
       ].filter(Boolean).join(' | ')
 
       const iaResult = await evaluarTriaje(sintomas, contexto)
@@ -358,7 +378,7 @@ export default function Triage() {
 
   const handleReset = () => {
     setResult(null); setUrgDirecta(null); setSintomas(''); setZonas([])
-    setPaciente(INITIAL_PACIENTE); setEvaScore(0); setRedFlags([])
+    setPaciente(INITIAL_PACIENTE); setVitals(INITIAL_VITALS); setEvaScore(0); setRedFlags([])
   }
 
   if (loading) return <AIScanner />
@@ -391,6 +411,7 @@ export default function Triage() {
       {modo === 'directo' ? (
         <ModoDirecto
           paciente={paciente} setPaciente={setPaciente}
+          vitals={vitals} setVitals={setVitals}
           sintomas={sintomas} setSintomas={setSintomas}
           zonas={zonas} setZonas={setZonas}
           evaScore={evaScore} setEvaScore={setEvaScore}
@@ -400,6 +421,7 @@ export default function Triage() {
       ) : (
         <ModoChat
           paciente={paciente} setPaciente={setPaciente}
+          vitals={vitals} setVitals={setVitals}
           zonas={zonas} setZonas={setZonas}
           evaScore={evaScore} setEvaScore={setEvaScore}
           redFlags={redFlags} setRedFlags={setRedFlags}

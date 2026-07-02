@@ -1,0 +1,82 @@
+.vitals-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.vitals-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #3B82F6;
+}
+
+.vitals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.vital-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.vital-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.vital-box input {
+  background: transparent;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+}
+
+.vital-box input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* Estado normal (cuando se ha llenado y está ok) */
+.vital-normal {
+  border-color: #10B981;
+  background: rgba(16, 185, 129, 0.05);
+}
+.vital-normal .vital-header {
+  color: #10B981;
+}
+
+/* Estado de peligro (rojo pulsante) */
+.vital-danger {
+  border-color: #EF4444;
+  background: rgba(239, 68, 68, 0.1);
+  animation: danger-pulse 2s infinite;
+}
+.vital-danger .vital-header, .vital-danger input {
+  color: #EF4444;
+}
+
+@keyframes danger-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}

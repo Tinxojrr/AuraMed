@@ -119,12 +119,12 @@ export default function MedicalPanel() {
 
   useEffect(() => {
     const canal = suscribirTriajes(() => refetch())
-    return () => canal.unsubscribe()
+    return () => { canal.unsubscribe() }
   }, [refetch])
 
   const moverTriaje = async (id, nuevoEstado) => {
     try {
-      queryClient.setQueryData(['medical_panel_data'], (oldData) => {
+      queryClient.setQueryData<any>(['medical_panel_data'], (oldData: any) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
@@ -298,7 +298,7 @@ export default function MedicalPanel() {
             }
             
             // Actualizar localmente
-            queryClient.setQueryData(['medical_panel_data'], (oldData) => {
+            queryClient.setQueryData<any>(['medical_panel_data'], (oldData: any) => {
               if (!oldData) return oldData;
               return {
                 ...oldData,
@@ -310,7 +310,7 @@ export default function MedicalPanel() {
             console.error('Error finalizando:', err)
             toast.error(`Error guardando en la nube: ${err.message || 'Error desconocido'}`)
             // Aún así cerramos y actualizamos estado local
-            queryClient.setQueryData(['medical_panel_data'], (oldData) => {
+            queryClient.setQueryData<any>(['medical_panel_data'], (oldData: any) => {
               if (!oldData) return oldData;
               return {
                 ...oldData,

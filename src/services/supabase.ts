@@ -1,7 +1,22 @@
 import { supabase } from '@/lib/supabase'
+import type { Database } from '@/types'
+import type { RealtimeChannel } from '@supabase/supabase-js'
+
+export type Triaje = Database['public']['Tables']['triajes']['Row'] & {
+  medicos?: {
+    nombre: string | null
+    especialidad_id: string | null
+    especialidades?: { nombre: string | null } | null
+  } | null
+}
+export type TriajeInsert = Database['public']['Tables']['triajes']['Insert']
+export type Medico = Database['public']['Tables']['medicos']['Row'] & {
+  especialidades?: { nombre: string | null } | null
+}
+export type Especialidad = Database['public']['Tables']['especialidades']['Row']
 
 // ─── Utilidades ───────────────────────────────────────────────────────────────
-const applyDateRange = (query, rango) => {
+const applyDateRange = (query: any, rango: string) => {
   if (!rango || rango === 'todos') return query
   const now = new Date()
   let limitDate = new Date()
@@ -19,23 +34,22 @@ const applyDateRange = (query, rango) => {
 
 // ─── Triajes ──────────────────────────────────────────────────────────────────
 
-export async function crearTriaje(datos) {
-  // Asegurarnos de que la prioridad esté en mayúsculas para no violar el CHECK de la BD
+export async function crearTriaje(datos: TriajeInsert): Promise<Triaje> {
   if (datos.prioridad) {
-    datos.prioridad = datos.prioridad.toUpperCase().trim();
+    datos.prioridad = datos.prioridad.toUpperCase().trim() as any
   }
 
   const { data, error } = await supabase
     .from('triajes')
-    .insert([datos])
+    .insert([datos as any])
     .select()
     .single()
 
   if (error) throw error
-  return data
+  return data as any
 }
 
-export async function obtenerTriajes(limite = 50, rango = 'todos') {
+export async function obtenerTriajes(limite: number = 50, rango: string = 'todos'): Promise<Triaje[]> {
   let query = supabase
     .from('triajes')
     .select(`*, medicos(nombre, especialidad_id, especialidades(nombre))`)
@@ -47,10 +61,10 @@ export async function obtenerTriajes(limite = 50, rango = 'todos') {
   const { data, error } = await query
 
   if (error) throw error
-  return data
+  return data as unknown as Triaje[]
 }
 
-export async function obtenerTriajePorId(id) {
+export async function obtenerTriajePorId(id: string): Promise<Triaje> {
   const { data, error } = await supabase
     .from('triajes')
     .select(`*, medicos(nombre, especialidad_id, especialidades(nombre))`)
@@ -58,10 +72,10 @@ export async function obtenerTriajePorId(id) {
     .single()
 
   if (error) throw error
-  return data
+  return data as unknown as Triaje
 }
 
-export async function actualizarEstadoTriaje(id, estado) {
+export async function actualizarEstadoTriaje(id: string, estado: string): Promise<any> {
   const { data, error } = await supabase
     .from('triajes')
     .update({ estado })
@@ -71,7 +85,7 @@ export async function actualizarEstadoTriaje(id, estado) {
   return data
 }
 
-export async function finalizarAtencion(id, estado, notas, pdfUrl) {
+export async function finalizarAtencion(id: string, estado: string, notas?: string, pdfUrl?: string | null): Promise<any> {
   const { data, error } = await supabase
     .from('triajes')
     .update({ 
@@ -85,7 +99,7 @@ export async function finalizarAtencion(id, estado, notas, pdfUrl) {
   return data
 }
 
-export async function subirFichaPDF(blob, fileName) {
+export async function subirFichaPDF(blob: Blob, fileName: string): Promise<string> {
   const { data, error } = await supabase.storage
     .from('fichas-clinicas')
     .upload(`pdfs/${fileName}`, blob, {
@@ -102,7 +116,7 @@ export async function subirFichaPDF(blob, fileName) {
   return publicUrl
 }
 
-export async function obtenerTriajesPorPaciente(paciente_rut) {
+export async function obtenerTriajesPorPaciente(paciente_rut: string): Promise<Triaje[]> {
   const { data, error } = await supabase
     .from('triajes')
     .select('*')
@@ -110,10 +124,10 @@ export async function obtenerTriajesPorPaciente(paciente_rut) {
     .order('created_at', { ascending: false })
 
   if (error) throw error
-  return data
+  return data as unknown as Triaje[]
 }
 
-export async function obtenerPosicionFila(id) {
+export async function obtenerPosicionFila(id: string): Promise<number> {
   const { data, error } = await supabase
     .from('triajes')
     .select('id, prioridad, created_at')
@@ -123,20 +137,20 @@ export async function obtenerPosicionFila(id) {
 
   if (!data || data.length === 0) return 0;
 
-  const PRIORIDAD_VALOR = { URGENCIA: 0, PRIORITARIO: 1, GENERAL: 2 }
+  const PRIORIDAD_VALOR: Record<string, number> = { URGENCIA: 0, PRIORITARIO: 1, GENERAL: 2 }
 
-  const ordenados = [...data].sort((a, b) => {
+  const ordenados = [...data].sort((a: any, b: any) => {
     const pA = PRIORIDAD_VALOR[a.prioridad] ?? 3;
     const pB = PRIORIDAD_VALOR[b.prioridad] ?? 3;
     if (pA !== pB) return pA - pB;
-    return new Date(a.created_at) - new Date(b.created_at);
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
   })
 
   const index = ordenados.findIndex(t => String(t.id) === String(id));
   return index >= 0 ? index : 0;
 }
 
-export async function actualizarNotasPaciente(id, notasExtra) {
+export async function actualizarNotasPaciente(id: string, notasExtra: string): Promise<any> {
   const { data: paciente, error: errorGet } = await supabase
     .from('triajes')
     .select('resumen_clinico')
@@ -160,17 +174,17 @@ export async function actualizarNotasPaciente(id, notasExtra) {
 
 // ─── Médicos ──────────────────────────────────────────────────────────────────
 
-export async function obtenerMedicos() {
+export async function obtenerMedicos(): Promise<Medico[]> {
   const { data, error } = await supabase
     .from('medicos')
     .select(`*, especialidades(nombre)`)
     .order('nombre')
 
   if (error) throw error
-  return data
+  return data as unknown as Medico[]
 }
 
-export async function actualizarDisponibilidadMedico(id, disponible) {
+export async function actualizarDisponibilidadMedico(id: string, disponible: boolean): Promise<Medico> {
   const { data, error } = await supabase
     .from('medicos')
     .update({ disponible })
@@ -179,31 +193,31 @@ export async function actualizarDisponibilidadMedico(id, disponible) {
     .single()
 
   if (error) throw error
-  return data
+  return data as unknown as Medico
 }
 
 // ─── Especialidades ───────────────────────────────────────────────────────────
 
-export async function obtenerEspecialidades() {
+export async function obtenerEspecialidades(): Promise<Especialidad[]> {
   const { data, error } = await supabase
     .from('especialidades')
     .select('*')
     .order('nombre')
 
   if (error) throw error
-  return data
+  return data as unknown as Especialidad[]
 }
 
 // ─── Realtime: escuchar cambios en triajes ────────────────────────────────────
 
-export function suscribirTriajes(callback) {
+export function suscribirTriajes(callback: () => void): RealtimeChannel {
   return supabase
     .channel('triajes-cambios')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'triajes' }, callback)
     .subscribe()
 }
 
-export function suscribirMedicos(callback) {
+export function suscribirMedicos(callback: () => void): RealtimeChannel {
   return supabase
     .channel('medicos-cambios')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'medicos' }, callback)
@@ -212,13 +226,13 @@ export function suscribirMedicos(callback) {
 
 // ─── Analytics ────────────────────────────────────────────────────────────────
 
-export async function obtenerEstadisticas(rango = 'todos') {
+export async function obtenerEstadisticas(rango: string = 'todos') {
   try {
     let query = supabase
       .from('triajes')
       .select('prioridad, estado, especialidad_recomendada, created_at')
       .order('created_at', { ascending: false })
-      .limit(2000) // Aumentamos límite para analíticas reales
+      .limit(2000)
 
     query = applyDateRange(query, rango)
 
@@ -226,7 +240,6 @@ export async function obtenerEstadisticas(rango = 'todos') {
 
     if (error) throw error
 
-    // Inicializamos el objeto de estadísticas en cero
     const stats = {
       total: data.length,
       urgencias: 0,
@@ -236,23 +249,19 @@ export async function obtenerEstadisticas(rango = 'todos') {
       en_consulta: 0,
       atendidos: 0,
       derivados: 0,
-      por_especialidad: {}
+      por_especialidad: {} as Record<string, number>
     }
 
-    // Calculamos todo en milisegundos
     data.forEach(t => {
-      // 1. Conteo por Prioridad
       if (t.prioridad === 'URGENCIA') stats.urgencias++
       if (t.prioridad === 'PRIORITARIO') stats.prioritarios++
       if (t.prioridad === 'GENERAL') stats.generales++
 
-      // 2. Conteo por Estado actual
       if (t.estado === 'en_espera') stats.en_espera++
       if (t.estado === 'en_consulta') stats.en_consulta++
       if (t.estado === 'atendido') stats.atendidos++
       if (t.estado === 'derivado') stats.derivados++
 
-      // 3. Conteo por Especialidad (agrupación dinámica)
       if (t.especialidad_recomendada) {
         const esp = t.especialidad_recomendada
         stats.por_especialidad[esp] = (stats.por_especialidad[esp] || 0) + 1
@@ -272,10 +281,10 @@ export async function obtenerEstadisticas(rango = 'todos') {
 
 // ─── Autenticación (Doctores / Admin) ──────────────────────────────────────────
 
-export async function iniciarSesion(email, password) {
+export async function iniciarSesion(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: email,
-    password: password,
+    email,
+    password,
   })
   if (error) throw error
   return data

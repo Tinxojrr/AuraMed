@@ -28,7 +28,7 @@ const ESTADO_COLORS = {
 const PIE_COLORS = ['#DC2626', '#F59E0B', '#10B981']
 
 // Tooltip de Recharts customizado para que parezca de cristal oscuro
-const CustomTooltip = ({ active, payload, label }) => {
+const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="custom-chart-tooltip">
@@ -84,7 +84,7 @@ export default function Dashboard() {
       refetch()
       toast.success('Nuevo paciente ingresado', { id: 'live-update', duration: 2000, icon: '⚡' })
     })
-    return () => canal.unsubscribe()
+    return () => { canal.unsubscribe() }
   }, [refetch])
 
   const cargarDatos = async () => {

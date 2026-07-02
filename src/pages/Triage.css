@@ -1,6 +1,28 @@
 .triage-page {
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Fondo Dinámico muy sutil estilo Aura/Glass */
+.triage-page::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 60%),
+              radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+  z-index: -1;
+  pointer-events: none;
+  animation: bg-drift 30s ease-in-out infinite alternate;
+}
+
+@keyframes bg-drift {
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(10deg) scale(1.1); }
 }
 
 .triage-header {
@@ -63,7 +85,7 @@
 /* ─── Grid modo directo ───────────────────────────────────── */
 .triage-grid {
   display: grid;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: 1fr 340px;
   gap: 20px;
   align-items: start;
 }
@@ -78,6 +100,14 @@
   border-radius: var(--radius-lg);
   padding: 20px;
   box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.form-card:hover {
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.08), 0 0 0 1px rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
 }
 
 .card-toggle {
@@ -245,7 +275,7 @@
 
 .chat-grid {
   display: grid;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: 1fr 340px;
   gap: 20px;
   align-items: start;
 }

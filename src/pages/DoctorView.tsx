@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Stethoscope, User, Clock, CheckCircle, FileText, Activity, AlertCircle, LogOut } from 'lucide-react'
+import { Volume2, Stethoscope, User, Clock, CheckCircle, FileText, Activity, AlertCircle, LogOut } from 'lucide-react'
 import toast, { Toaster } from 'react-hot-toast'
 import { obtenerTriajes, actualizarEstadoTriaje, obtenerMedicos, suscribirTriajes } from '@/services/supabase'
 import PageTransition from '@/components/ui/PageTransition'
@@ -33,7 +33,7 @@ export default function DoctorView() {
 
   useEffect(() => {
     const canal = suscribirTriajes(() => refetch())
-    return () => canal.unsubscribe()
+    return () => { canal.unsubscribe() }
   }, [refetch])
 
   // Lógica de Login
@@ -100,7 +100,7 @@ export default function DoctorView() {
     e.stopPropagation()
     try {
       // Optimistic update
-      queryClient.setQueryData(['doctor_data'], (oldData) => {
+      queryClient.setQueryData<any>(['doctor_data'], (oldData: any) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
@@ -244,7 +244,7 @@ export default function DoctorView() {
             }
             
             // Actualizar localmente
-            queryClient.setQueryData(['doctor_data'], (oldData) => {
+            queryClient.setQueryData<any>(['doctor_data'], (oldData: any) => {
               if (!oldData) return oldData;
               return {
                 ...oldData,

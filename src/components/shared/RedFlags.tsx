@@ -2,30 +2,14 @@ import { AlertTriangle } from 'lucide-react'
 import './RedFlags.css'
 
 export const RED_FLAGS = [
-  {
-    id: 'embarazo',
-    label: 'Embarazo',
-    icon: '🤰',
-    desc: 'Paciente embarazada o posible embarazo',
-  },
-  {
-    id: 'inmunodeprimido',
-    label: 'Inmunodeprimido',
-    icon: '🛡️',
-    desc: 'VIH, quimioterapia, trasplante, corticoides crónicos',
-  },
-  {
-    id: 'diabetico',
-    label: 'Diabético',
-    icon: '💉',
-    desc: 'Diabetes mellitus tipo 1 o 2',
-  },
-  {
-    id: 'anticoagulado',
-    label: 'Anticoagulado',
-    icon: '💊',
-    desc: 'Warfarina, heparina, aspirina diaria u otros',
-  },
+  { id: 'hipertension', label: 'Hipertensión', icon: '🫀', desc: 'Presión arterial alta crónica' },
+  { id: 'asma', label: 'Asma / EPOC', icon: '🫁', desc: 'Dificultad respiratoria crónica' },
+  { id: 'diabetico', label: 'Diabético', icon: '💉', desc: 'Diabetes mellitus tipo 1 o 2' },
+  { id: 'obesidad', label: 'Obesidad', icon: '⚖️', desc: 'IMC > 35' },
+  { id: 'inmunodeprimido', label: 'Inmunodeprimido', icon: '🛡️', desc: 'VIH, quimioterapia, corticoides crónicos' },
+  { id: 'anticoagulado', label: 'Anticoagulado', icon: '💊', desc: 'Warfarina, heparina, etc.' },
+  { id: 'alergia_severa', label: 'Alergia Severa', icon: '🥜', desc: 'Riesgo de anafilaxia' },
+  { id: 'embarazo', label: 'Embarazo', icon: '🤰', desc: 'Paciente gestante' },
 ]
 
 // ─── Lógica de cortocircuito ────────────────────────────────

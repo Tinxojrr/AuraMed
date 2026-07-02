@@ -59,7 +59,7 @@ export default function PatientTicket() {
 
   useEffect(() => {
     if (!id) return;
-    const canal = suscribirTriajes(async (payload) => {
+    const canal = suscribirTriajes(async (payload: any) => {
       // If our own ticket changed
       if (payload.new && String(payload.new.id) === String(id)) {
         setTicket(prev => {
@@ -76,7 +76,7 @@ export default function PatientTicket() {
       }
     });
 
-    return () => canal.unsubscribe();
+    return () => { canal.unsubscribe() };
   }, [id, ticket?.estado])
 
   const handleSendMessage = async (e) => {

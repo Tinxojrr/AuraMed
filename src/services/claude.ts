@@ -1,9 +1,25 @@
 import { supabase } from '@/lib/supabase'
 
+export interface TriajeResult {
+  prioridad: 'URGENCIA' | 'PRIORITARIO' | 'GENERAL'
+  especialidad: string
+  tiempo_espera_estimado: number | string
+  resumen: string
+  nivel_confianza: number
+  recomendaciones: string[]
+  preguntas_seguimiento?: string[]
+  email_contencion?: string
+}
+
+interface ChatMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 /**
  * Función auxiliar para invocar la Edge Function de Supabase
  */
-async function invocarEdgeFunction(action, payload) {
+async function invocarEdgeFunction(action: string, payload: any) {
   const { data, error } = await supabase.functions.invoke('triaje-ia', {
     body: { action, payload }
   })
@@ -19,7 +35,7 @@ async function invocarEdgeFunction(action, payload) {
 /**
  * Extrae y parsea el JSON de la respuesta de texto de Claude
  */
-function parsearRespuestaJSON(text) {
+function parsearRespuestaJSON(text: string): any {
   try {
     return JSON.parse(text)
   } catch {
@@ -40,42 +56,34 @@ function parsearRespuestaJSON(text) {
 
 /**
  * Evalúa síntomas con Claude y retorna el resultado del triaje
- * @param {string} sintomas - Descripción libre de síntomas del paciente
- * @param {string} [contexto] - Contexto adicional (edad, historial previo, etc.)
- * @returns {Promise<Object>} Resultado del triaje
  */
-export async function evaluarTriaje(sintomas, contexto = '') {
+export async function evaluarTriaje(sintomas: string, contexto: string = ''): Promise<TriajeResult> {
   const userMessage = contexto
     ? `Contexto del paciente: ${contexto}\n\nSíntomas reportados: ${sintomas}`
     : `Síntomas reportados: ${sintomas}`
 
   const data = await invocarEdgeFunction('evaluar', { message: userMessage })
   const text = data.content[0]?.text || ''
-  return parsearRespuestaJSON(text)
+  return parsearRespuestaJSON(text) as TriajeResult
 }
 
 /**
  * Chat conversacional para triaje guiado paso a paso
- * @param {Array} messages - Historial de mensajes [{role, content}]
- * @returns {Promise<string>} Respuesta de la IA
  */
-export async function chatTriaje(messages) {
+export async function chatTriaje(messages: ChatMessage[]): Promise<string> {
   const data = await invocarEdgeFunction('chat', { messages })
   return data.content[0]?.text || ''
 }
 
 /**
  * Evalúa estado emocional con Claude y retorna el resultado del triaje mental
- * @param {string} emociones - Descripción del estado de ánimo
- * @param {string} [contexto] - Síntomas seleccionados y contexto adicional
- * @returns {Promise<Object>} Resultado del triaje
  */
-export async function evaluarTriajeMental(emociones, contexto = '') {
+export async function evaluarTriajeMental(emociones: string, contexto: string = ''): Promise<TriajeResult> {
   const userMessage = contexto
     ? `Contexto del paciente: ${contexto}\n\nEstado emocional reportado: ${emociones}`
     : `Estado emocional reportado: ${emociones}`
 
   const data = await invocarEdgeFunction('mental', { message: userMessage })
   const text = data.content[0]?.text || ''
-  return parsearRespuestaJSON(text)
+  return parsearRespuestaJSON(text) as TriajeResult
 }

@@ -23,29 +23,34 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 12px;
-  border: 1.5px solid var(--border-color);
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  background: var(--bg-page);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
   color: var(--text-secondary);
   font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
   position: relative;
+  overflow: hidden;
 }
 
 .redflag-btn:hover {
-  border-color: #DC2626;
+  border-color: rgba(220, 38, 38, 0.4);
   color: #DC2626;
-  background: #FEF2F2;
+  background: rgba(254, 242, 242, 0.5);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
+  transform: translateY(-1px);
 }
 
 .redflag-btn.active {
   border-color: #DC2626;
-  background: #FEF2F2;
+  background: rgba(254, 242, 242, 0.8);
   color: #DC2626;
-  font-weight: 500;
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.2), inset 0 0 5px rgba(220, 38, 38, 0.1);
 }
 
 .redflag-icon { font-size: 1rem; flex-shrink: 0; }

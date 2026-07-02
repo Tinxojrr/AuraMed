@@ -25,6 +25,7 @@ import PatientTicket from '@/pages/PatientTicket'
 import FamilyTracker from '@/pages/FamilyTracker'
 import MentalTriage  from '@/pages/MentalTriage'
 import DoctorView    from '@/pages/DoctorView'
+import Kiosco        from '@/pages/Kiosco'
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -61,6 +62,8 @@ export default function App() {
       <Route path="/bienestar" element={
         <MentalTriage />
       } />
+      
+      <Route path="/kiosco" element={<Kiosco />} />
       
       <Route path="/ticket/:id" element={<PatientTicket />} />
       <Route path="/seguimiento/:id" element={<FamilyTracker />} />

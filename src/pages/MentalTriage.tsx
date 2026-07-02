@@ -6,13 +6,7 @@ import { evaluarTriajeMental } from '../services/claude'
 import { crearTriaje } from '../services/supabase'
 import './MentalTriage.css'
 
-const formatRUT = (value) => {
-  let rut = value.replace(/[^0-9kK]/g, '').toUpperCase()
-  if (rut.length <= 1) return rut
-  const dv = rut.slice(-1)
-  const body = rut.slice(0, -1)
-  return body.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "-" + dv
-}
+import { formatRUT, validateRUT } from '../utils/rut'
 
 const EMOCIONES = [
   { id: 'ansiedad', label: 'Ansiedad / Pánico', color: '#3b82f6' }, // Blue
@@ -73,6 +67,10 @@ export default function MentalTriage({ onResultado }) {
     }
     if (emocionesSelec.length === 0 && !relato.trim()) {
       toast.error('Selecciona cómo te sientes o cuéntanos qué sucede.')
+      return
+    }
+    if (paciente.rut && !validateRUT(paciente.rut)) {
+      toast.error('El RUT ingresado no es válido')
       return
     }
 
