@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { Stethoscope, User, Clock, CheckCircle, FileText, Activity, AlertCircle, LogOut } from 'lucide-react'
 import toast, { Toaster } from 'react-hot-toast'
 import { obtenerTriajes, actualizarEstadoTriaje, obtenerMedicos, suscribirTriajes } from '@/services/supabase'
 import PageTransition from '@/components/ui/PageTransition'
 import ClinicalDrawer from '@/components/shared/ClinicalDrawer'
 import { SkeletonCard } from '@/components/ui/Skeleton'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import './DoctorView.css'
 
 const PRIORITY_CONFIG = {
@@ -14,30 +15,26 @@ const PRIORITY_CONFIG = {
 }
 
 export default function DoctorView() {
-  const [medicos, setMedicos] = useState([])
-  const [triajes, setTriajes] = useState([])
-  const [loading, setLoading] = useState(true)
-  
+  const queryClient = useQueryClient()
   const [medicoLogueado, setMedicoLogueado] = useState(null)
   const [pacienteActivo, setPacienteActivo] = useState(null)
 
-  const cargarDatos = useCallback(async () => {
-    try {
+  const { data, isLoading: loading, refetch } = useQuery({
+    queryKey: ['doctor_data'],
+    queryFn: async () => {
       const [t, m] = await Promise.all([obtenerTriajes(200), obtenerMedicos()])
-      setTriajes(t)
-      setMedicos(m)
-    } catch (err) {
-      toast.error('Error cargando datos')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+      return { triajes: t, medicos: m }
+    },
+    refetchInterval: 30000,
+  })
+
+  const medicos = data?.medicos || []
+  const triajes = data?.triajes || []
 
   useEffect(() => {
-    cargarDatos()
-    const canal = suscribirTriajes(cargarDatos)
+    const canal = suscribirTriajes(() => refetch())
     return () => canal.unsubscribe()
-  }, [cargarDatos])
+  }, [refetch])
 
   // Lógica de Login
   if (!medicoLogueado) {
@@ -103,12 +100,18 @@ export default function DoctorView() {
     e.stopPropagation()
     try {
       // Optimistic update
-      setTriajes(prev => prev.map(t => t.id === triajeId ? { ...t, estado: 'en_consulta' } : t))
+      queryClient.setQueryData(['doctor_data'], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          triajes: oldData.triajes.map(t => t.id === triajeId ? { ...t, estado: 'en_consulta' } : t)
+        }
+      })
       await actualizarEstadoTriaje(triajeId, 'en_consulta')
       toast.success('Paciente llamado a box')
     } catch (err) {
       toast.error('Error al actualizar')
-      cargarDatos()
+      refetch()
     }
   }
 
@@ -241,9 +244,13 @@ export default function DoctorView() {
             }
             
             // Actualizar localmente
-            setTriajes(prev =>
-              prev.map(t => t.id === id ? { ...t, estado, notas_medico: notas, pdf_url: publicUrl } : t)
-            )
+            queryClient.setQueryData(['doctor_data'], (oldData) => {
+              if (!oldData) return oldData;
+              return {
+                ...oldData,
+                triajes: oldData.triajes.map(t => t.id === id ? { ...t, estado, notas_medico: notas, pdf_url: publicUrl } : t)
+              }
+            })
             toast.success('Atención finalizada')
           } catch (err) {
             toast.error('Error guardando atención')

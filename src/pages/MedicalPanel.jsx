@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { User, Clock, Stethoscope, AlertCircle, AlertTriangle, CheckCircle, Volume2, VolumeX } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { obtenerTriajes, actualizarEstadoTriaje, obtenerMedicos, suscribirTriajes } from '@/services/supabase'
@@ -6,6 +6,7 @@ import { SkeletonCard } from '@/components/ui/Skeleton'
 import { useUrgenciaAlert } from '@/hooks/useUrgenciaAlert'
 import PageTransition from '@/components/ui/PageTransition'
 import ClinicalDrawer from '@/components/shared/ClinicalDrawer'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import './MedicalPanel.css'
 
 const COLUMNAS = [
@@ -95,46 +96,46 @@ function TriajeCard({ triaje, onMover }) {
 }
 
 export default function MedicalPanel() {
-  const [triajes, setTriajes]   = useState([])
-  const [medicos, setMedicos]   = useState([])
-  const [loading, setLoading]   = useState(true)
+  const queryClient = useQueryClient()
   const [dragOver, setDragOver] = useState(null)
   const [dragging, setDragging] = useState(null)
   const [sonido, setSonido]     = useState(true)
   const [pacienteActivo, setPacienteActivo] = useState(null)
 
+  const { data, isLoading: loading, refetch } = useQuery({
+    queryKey: ['medical_panel_data'],
+    queryFn: async () => {
+      const [t, m] = await Promise.all([obtenerTriajes(200), obtenerMedicos()])
+      return { triajes: t, medicos: m }
+    },
+    refetchInterval: 30000,
+  })
+
+  const triajes = data?.triajes || []
+  const medicos = data?.medicos || []
+
   // Alerta sonora automática
   useUrgenciaAlert(sonido ? triajes : [])
 
-  const cargarDatos = useCallback(async () => {
-    try {
-      const [t, m] = await Promise.all([obtenerTriajes(200), obtenerMedicos()])
-      setTriajes(t)
-      setMedicos(m)
-    } catch (err) {
-      toast.error('Error cargando panel médico')
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
   useEffect(() => {
-    cargarDatos()
-    const canal = suscribirTriajes(cargarDatos)
+    const canal = suscribirTriajes(() => refetch())
     return () => canal.unsubscribe()
-  }, [cargarDatos])
+  }, [refetch])
 
   const moverTriaje = async (id, nuevoEstado) => {
     try {
-      setTriajes(prev =>
-        prev.map(t => t.id === id ? { ...t, estado: nuevoEstado } : t)
-      )
+      queryClient.setQueryData(['medical_panel_data'], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          triajes: oldData.triajes.map(t => t.id === id ? { ...t, estado: nuevoEstado } : t)
+        }
+      })
       await actualizarEstadoTriaje(id, nuevoEstado)
       toast.success(`Paciente movido a ${COLUMNAS.find(c => c.id === nuevoEstado)?.label}`)
     } catch (err) {
       toast.error('Error actualizando estado')
-      cargarDatos()
+      refetch()
     }
   }
 
@@ -297,15 +298,25 @@ export default function MedicalPanel() {
             }
             
             // Actualizar localmente
-            setTriajes(prev =>
-              prev.map(t => t.id === id ? { ...t, estado, notas_medico: notas, pdf_url: publicUrl } : t)
-            )
+            queryClient.setQueryData(['medical_panel_data'], (oldData) => {
+              if (!oldData) return oldData;
+              return {
+                ...oldData,
+                triajes: oldData.triajes.map(t => t.id === id ? { ...t, estado, notas_medico: notas, pdf_url: publicUrl } : t)
+              }
+            })
             toast.success(`Paciente dado de alta y ficha guardada en la nube`)
           } catch (err) {
             console.error('Error finalizando:', err)
             toast.error(`Error guardando en la nube: ${err.message || 'Error desconocido'}`)
             // Aún así cerramos y actualizamos estado local
-            setTriajes(prev => prev.map(t => t.id === id ? { ...t, estado } : t))
+            queryClient.setQueryData(['medical_panel_data'], (oldData) => {
+              if (!oldData) return oldData;
+              return {
+                ...oldData,
+                triajes: oldData.triajes.map(t => t.id === id ? { ...t, estado } : t)
+              }
+            })
           } finally {
             setPacienteActivo(null)
           }

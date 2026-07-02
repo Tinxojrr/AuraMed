@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { Search, Clock, AlertCircle, AlertTriangle, CheckCircle, ChevronDown, ChevronUp, RefreshCw, FileText, User, Calendar, Activity, Hash } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { obtenerTriajes, obtenerTriajesPorPaciente } from '@/services/supabase'
-import PageTransition from '@/components/ui/PageTransition' // <-- ¡Le agregué tu transición de página!
+import { useQuery } from '@tanstack/react-query'
+import PageTransition from '@/components/ui/PageTransition'
 import './History.css'
 
 const PRIORITY_CONFIG = {
@@ -187,37 +188,31 @@ function PatientProfileCard({ triajes }) {
 }
 
 export default function History() {
-  const [triajes,  setTriajes]  = useState([])
-  const [loading,  setLoading]  = useState(true)
   const [busqueda, setBusqueda] = useState('')
+  const [activeSearch, setActiveSearch] = useState('')
   const [filtro,   setFiltro]   = useState('todos')
 
-  const cargarDatos = useCallback(async () => {
-    try {
-      setLoading(true)
-      const data = await obtenerTriajes(200)
-      setTriajes(data || [])
-    } catch (err) {
-      toast.error('Error cargando historial')
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const { data: triajesData, isLoading: loading, refetch } = useQuery({
+    queryKey: ['history_data', activeSearch],
+    queryFn: async () => {
+      if (activeSearch.trim()) {
+        return await obtenerTriajesPorPaciente(activeSearch.trim())
+      }
+      return await obtenerTriajes(200)
+    },
+    refetchInterval: activeSearch ? false : 30000,
+  })
 
-  useEffect(() => { cargarDatos() }, [cargarDatos])
+  const triajes = triajesData || []
 
-  const buscarPorRut = async () => {
-    if (!busqueda.trim()) { cargarDatos(); return }
-    try {
-      setLoading(true)
-      const data = await obtenerTriajesPorPaciente(busqueda.trim())
-      setTriajes(data || [])
-    } catch {
-      toast.error('Error en la búsqueda remota')
-    } finally {
-      setLoading(false)
-    }
+  const cargarDatos = () => {
+    setActiveSearch('')
+    setBusqueda('')
+    refetch()
+  }
+
+  const buscarPorRut = () => {
+    setActiveSearch(busqueda)
   }
 
   // EL FILTRO SEGURO CONTRA CRASHES
