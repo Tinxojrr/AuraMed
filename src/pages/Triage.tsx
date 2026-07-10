@@ -63,7 +63,7 @@ function ModoDirecto({
                   <div className="field">
                     <label>Nombre completo *</label>
                     <input type="text" placeholder="Ej: Juan Pérez González"
-                      value={paciente.nombre} onChange={e => setPaciente(p => ({ ...p, nombre: e.target.value }))} required />
+                      value={paciente.nombre} onChange={e => setPaciente(p => ({ ...p, nombre: e.target.value }))} />
                   </div>
                   <div className="field">
                     <label>RUT</label>
@@ -106,7 +106,7 @@ function ModoDirecto({
             </div>
             <textarea className="symptoms-textarea"
               placeholder="Describe con tus propias palabras qué sientes. Por ejemplo: 'Tengo dolor fuerte en el pecho desde hace 2 horas, me cuesta respirar...'"
-              value={sintomas} onChange={e => setSintomas(e.target.value)} rows={5} required />
+              value={sintomas} onChange={e => setSintomas(e.target.value)} rows={5} />
             <div className="char-count">
               {sintomas.length} caracteres
               {sintomas.length > 0 && sintomas.length < 20 && (
@@ -121,8 +121,7 @@ function ModoDirecto({
             <EVAScale value={evaScore} onChange={setEvaScore} />
           </div>
 
-          <button type="submit" className="btn-submit"
-            disabled={loading || !sintomas.trim() || !paciente.nombre.trim()}>
+          <button type="submit" className="btn-submit" disabled={loading}>
             <Send size={18} />
             Analizar con IA
           </button>
@@ -317,14 +316,15 @@ export default function Triage({ onResultado }: { onResultado?: any }) {
   const handleSubmitDirecto = async (e) => {
     e.preventDefault()
     if (!sintomas.trim()) { toast.error('Describe los síntomas del paciente'); return }
-    if (!paciente.nombre.trim()) { toast.error('Ingresa el nombre del paciente'); return }
     if (paciente.rut && !validateRUT(paciente.rut)) { toast.error('El RUT ingresado no es válido'); return }
+
+    const nombreFinal = paciente.nombre.trim() || 'Paciente Anónimo'
 
     // ── Cortocircuito: Red Flag + síntoma crítico → Urgencia directa
     const evaluacion = evaluarRedFlags(redFlags, sintomas, evaScore)
     if (evaluacion.esUrgenciaDirecta) {
       await crearTriaje({
-        paciente_nombre: paciente.nombre, paciente_rut: paciente.rut || null,
+        paciente_nombre: nombreFinal, paciente_rut: paciente.rut || null,
         paciente_edad: paciente.edad ? parseInt(paciente.edad) : null,
         paciente_genero: paciente.genero || null, sintomas_texto: sintomas,
         zona_corporal: zonas, prioridad: 'URGENCIA',
@@ -357,7 +357,7 @@ export default function Triage({ onResultado }: { onResultado?: any }) {
 
       const iaResult = await evaluarTriaje(sintomas, contexto)
       const triajeGuardado = await crearTriaje({
-        paciente_nombre: paciente.nombre, paciente_rut: paciente.rut || null,
+        paciente_nombre: nombreFinal, paciente_rut: paciente.rut || null,
         paciente_edad: paciente.edad ? parseInt(paciente.edad) : null,
         paciente_genero: paciente.genero || null, sintomas_texto: sintomas,
         zona_corporal: zonas, prioridad: iaResult.prioridad,
