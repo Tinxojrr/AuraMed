@@ -29,15 +29,21 @@ export function evaluarRedFlags(flags, sintomas, evaScore) {
   // Cortocircuito: flag activa + síntoma crítico o dolor extremo
   if (hayFlags && (palabraMatch || dolorAlto)) {
     const razon = []
-    if (flags.includes('diabetico'))       razon.push('paciente diabético')
-    if (flags.includes('anticoagulado'))   razon.push('paciente anticoagulado')
-    if (flags.includes('inmunodeprimido')) razon.push('paciente inmunodeprimido')
-    if (flags.includes('embarazo'))        razon.push('paciente embarazada')
-    if (dolorAlto)                         razon.push(`dolor EVA ${evaScore}/10`)
+    
+    // Mapear TODOS los flags activos a sus etiquetas correspondientes
+    flags.forEach(flagId => {
+      const found = RED_FLAGS.find(f => f.id === flagId)
+      if (found) razon.push(`paciente con ${found.label.toLowerCase()}`)
+    })
+    
+    if (dolorAlto) razon.push(`dolor EVA ${evaScore}/10`)
+    
+    // Si por alguna razón está vacío, poner un fallback
+    const razonFinal = razon.length > 0 ? razon.join(', ') : 'factores de riesgo críticos'
 
     return {
       esUrgenciaDirecta: true,
-      razon: razon.join(', '),
+      razon: razonFinal,
     }
   }
 
