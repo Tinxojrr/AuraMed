@@ -10,7 +10,7 @@ export default function PublicLayout({ children }) {
     <div className="public-layout" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg-page)' }}>
       
       {/* ─── BARRA DE NAVEGACIÓN DEL PACIENTE ─── */}
-      <nav className="navbar" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100 }}>
+      <nav className="navbar" style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <Link 
@@ -28,17 +28,19 @@ export default function PublicLayout({ children }) {
           >
             <ArrowLeft size={16} /> Salir del triaje
           </Link>
+        </div>
 
-          <div className="navbar-brand" style={{ pointerEvents: 'none', marginLeft: '10px' }}>
+        {/* A la derecha: Logo y botón de noche/día */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <div className="navbar-brand" style={{ pointerEvents: 'none' }}>
             <span className="navbar-logo">⚕</span>
             <span className="navbar-name">Aura<strong>Med</strong></span>
           </div>
-        </div>
 
-        {/* A la derecha: EXCLUSIVAMENTE el botón de noche/día */}
-        <button className="navbar-theme-btn" onClick={toggleTheme} aria-label="Cambiar tema">
-          {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-        </button>
+          <button className="navbar-theme-btn" onClick={toggleTheme} aria-label="Cambiar tema">
+            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+        </div>
 
       </nav>
 

@@ -1,5 +1,6 @@
 // @ts-nocheck
 import React, { useRef, useState, useEffect, useMemo } from 'react';
+import { useTheme } from '@/store/ThemeContext';
 import { Canvas } from '@react-three/fiber';
 import { Environment, ContactShadows, CameraControls, useGLTF, Html } from '@react-three/drei';
 import * as THREE from 'three';
@@ -53,7 +54,7 @@ const DEFAULT_CAM_TARGET = [0, 0.9, 0];
 
 useGLTF.preload('/Xbot.glb');
 
-function MannequinModel() {
+function MannequinModel({ isLight }: { isLight: boolean }) {
   const { scene } = useGLTF('/Xbot.glb');
   
   const clonedScene = useMemo(() => {
@@ -82,10 +83,10 @@ function MannequinModel() {
     clone.traverse((child: any) => {
       if (child.isMesh) {
         child.material = new THREE.MeshPhysicalMaterial({
-          color: '#1E3A8A',
-          emissive: '#0B2252',
+          color: isLight ? '#3B82F6' : '#1E3A8A', // Azul más vivo y claro en light mode
+          emissive: isLight ? '#1D4ED8' : '#0B2252',
           transmission: 0.9,
-          opacity: 0.8,
+          opacity: isLight ? 0.9 : 0.8,
           transparent: true,
           roughness: 0.1,
           metalness: 0.5,
@@ -94,7 +95,7 @@ function MannequinModel() {
       }
     });
     return clone;
-  }, [scene]);
+  }, [scene, isLight]);
 
   return <primitive object={clonedScene} />;
 }
@@ -209,6 +210,9 @@ function SceneController({ focusedPart }) {
 }
 
 export default function BodyMap3DReal({ selected = [], onChange }) {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  
   const [hovered, setHovered] = useState<string | null>(null);
   const focusedPart = selected.length > 0 ? selected[selected.length - 1] : null;
 
@@ -221,12 +225,12 @@ export default function BodyMap3DReal({ selected = [], onChange }) {
   };
 
   return (
-    <div className="bodymap-container" style={{ position: 'relative', height: '600px', width: '100%', background: '#020617', borderRadius: '1rem', overflow: 'hidden', border: '1px solid #1E293B', boxShadow: 'inset 0 0 50px rgba(0,0,0,0.8)' }}>
+    <div className="bodymap-container" style={{ position: 'relative', height: '600px', width: '100%', background: isLight ? '#F8FAFC' : '#020617', borderRadius: '1rem', overflow: 'hidden', border: isLight ? '1px solid #E2E8F0' : '1px solid #1E293B', boxShadow: isLight ? 'inset 0 0 50px rgba(0,0,0,0.02)' : 'inset 0 0 50px rgba(0,0,0,0.8)' }}>
       <Canvas 
         camera={{ position: DEFAULT_CAM_POS as [number, number, number], fov: 30 }} 
         onPointerMissed={() => setHovered(null)}
       >
-        <color attach="background" args={['#020617']} />
+        <color attach="background" args={[isLight ? '#F8FAFC' : '#020617']} />
         <ambientLight intensity={0.5} />
         <pointLight position={[2, 2, 2]} intensity={2} color="#3B82F6" />
         <pointLight position={[-2, 1, -2]} intensity={1} color="#8B5CF6" />
@@ -235,7 +239,7 @@ export default function BodyMap3DReal({ selected = [], onChange }) {
         
         <group position={[0, 0, 0]}>
           <React.Suspense fallback={null}>
-            <MannequinModel />
+            <MannequinModel isLight={isLight} />
           </React.Suspense>
           
           {HOTSPOTS.map(h => (
