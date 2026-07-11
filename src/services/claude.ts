@@ -63,7 +63,8 @@ export async function evaluarTriaje(sintomas: string, contexto: string = ''): Pr
     : `Síntomas reportados: ${sintomas}`
 
   const data = await invocarEdgeFunction('evaluar', { message: userMessage })
-  const text = data.content[0]?.text || ''
+  const textBlock = data.content?.find((c: any) => c.type === 'text')
+  const text = textBlock?.text || ''
   return parsearRespuestaJSON(text) as TriajeResult
 }
 
@@ -72,7 +73,8 @@ export async function evaluarTriaje(sintomas: string, contexto: string = ''): Pr
  */
 export async function chatTriaje(messages: ChatMessage[]): Promise<string> {
   const data = await invocarEdgeFunction('chat', { messages })
-  return data.content[0]?.text || ''
+  const textBlock = data.content?.find((c: any) => c.type === 'text')
+  return textBlock?.text || ''
 }
 
 /**
@@ -84,6 +86,7 @@ export async function evaluarTriajeMental(emociones: string, contexto: string = 
     : `Estado emocional reportado: ${emociones}`
 
   const data = await invocarEdgeFunction('mental', { message: userMessage })
-  const text = data.content[0]?.text || ''
+  const textBlock = data.content?.find((c: any) => c.type === 'text')
+  const text = textBlock?.text || ''
   return parsearRespuestaJSON(text) as TriajeResult
 }

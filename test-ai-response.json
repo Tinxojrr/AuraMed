@@ -1,0 +1,35 @@
+{
+  "model": "claude-sonnet-5",
+  "id": "msg_011CcuHdVDfGAkxhurtKT16e",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+    {
+      "type": "thinking",
+      "thinking": "",
+      "signature": "EqkDCokBCA8YAipA5JQeMP1kVWQ7C9Oh3LN0WoUlwW4LocEvJXPdkuqG++yMt79tXo6vPCb2kvNFArBLkVW4NlqjfqYibrbjkgE4JTIPY2xhdWRlLXNvbm5ldC01OABCCHRoaW5raW5nWiRjZmEzMTFjZS0wYWU1LTQ2ODQtOWM5NC0zOTBmOThmNTE2ZmYSDADd0/guqrMJkqy7cRoMJpv/i4xsf0yt1EbzIjBqyQSY1BJAHvkmUcyesmQH5S5Qa+iEu+yLbG9KNrX+fTYX9Msnrbgp69k8ZSiKEW4qzAEHvnv3+lSUtvE9ILCKR8jcm1Mjlv+mq4suHpsKcrLj7Qxn7MLnMDLMKnBQe7Nb7N2IgMltVOgBPrv8F4AOVGmvYMOIJPyrXrhRY137s9XSb1QDEemjlxxrgZM4+CGy29+q55iYkzlT/0cEaZFwS3pkFbhnZBascfSeJSx1fhTtErr9no8h5xFXutFiPEiGy21WY3ooX00DamQ2QAqBRVGaVwN3OHjFaTOuhg1FU+9kmB23FM9negejYqtgpRSTiwDA0lvqLaUeBxwbWegYAQ=="
+    },
+    {
+      "type": "text",
+      "text": "{\n  \"prioridad\": \"GENERAL\",\n  \"especialidad\": \"Medicina General\",\n  \"resumen\": \"Paciente refiere dolor de cabeza de intensidad leve, sin mención de otros síntomas asociados.\",\n  \"recomendaciones\": [\n    \"Descansar en un ambiente tranquilo y con poca luz\",\n    \"Mantenerse bien hidratado\",\n    \"Puede tomar un analgésico de venta libre si no tiene contraindicaciones (ej. paracetamol), siguiendo indicaciones del envase\",\n    \"Si el dolor empeora, se vuelve súbito e intenso, o aparecen otros síntomas, buscar atención médica de inmediato\"\n  ],\n  \"preguntas_seguimiento\": [\n    \"¿Desde cuándo tiene el dolor y con qué frecuencia se presenta?\",\n    \"¿Ha notado náuseas, sensibilidad a la luz, visión borrosa, fiebre o algún otro síntoma asociado?\"\n  ],\n  \"nivel_confianza\": 0.7,\n  \"tiempo_espera_estimado\": 60\n}"
+    }
+  ],
+  "stop_reason": "end_turn",
+  "stop_sequence": null,
+  "stop_details": null,
+  "usage": {
+    "input_tokens": 709,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "cache_creation": {
+      "ephemeral_5m_input_tokens": 0,
+      "ephemeral_1h_input_tokens": 0
+    },
+    "output_tokens": 460,
+    "output_tokens_details": {
+      "thinking_tokens": 79
+    },
+    "service_tier": "standard",
+    "inference_geo": "global"
+  }
+}
