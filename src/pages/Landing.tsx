@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '@/store/ThemeContext'
-import { Activity, Brain, Clock, Shield, ChevronRight, Sun, Moon, Zap, Users, BarChart2, Sparkles, Lock } from 'lucide-react'
+import { Activity, Brain, Clock, Shield, ChevronRight, Sun, Moon, Zap, Users, BarChart2, Sparkles, Lock, Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import './Landing.css'
 
@@ -12,18 +12,19 @@ const STATS = [
 ]
 
 const FEATURES = [
-  { icon: Brain, title: 'IA clínica avanzada', desc: 'Claude analiza síntomas en lenguaje natural y clasifica la urgencia en segundos.', color: '#3b82f6' },
-  { icon: Zap, title: 'Triaje en tiempo real', desc: 'Cuerpo humano interactivo, resultados instantáneos y alertas visuales por prioridad.', color: '#f59e0b' },
-  { icon: Users, title: 'Panel médico Kanban', desc: 'Gestión visual de pacientes con arrastrar y soltar. Disponibilidad en vivo.', color: '#10b981' },
-  { icon: BarChart2, title: 'Dashboard analítico', desc: 'Estadísticas en tiempo real: carga por especialidad, urgencias del día, tendencias.', color: '#8b5cf6' },
-  { icon: Clock, title: 'Historial auditable', desc: 'Cada triaje queda registrado en la nube con su línea de tiempo completa.', color: '#ef4444' },
-  { icon: Shield, title: 'Seguro y confiable', desc: 'Base de datos relacional con RLS, acceso controlado y datos encriptados.', color: '#06b6d4' },
+  { icon: Brain, title: 'IA clínica avanzada', desc: 'Claude analiza síntomas en lenguaje natural y clasifica la urgencia en segundos.', color: '#0284c7' },
+  { icon: Zap, title: 'Triaje en tiempo real', desc: 'Cuerpo humano interactivo, resultados instantáneos y alertas visuales por prioridad.', color: '#0d9488' },
+  { icon: Users, title: 'Panel médico Kanban', desc: 'Gestión visual de pacientes con arrastrar y soltar. Disponibilidad en vivo.', color: '#0284c7' },
+  { icon: BarChart2, title: 'Dashboard analítico', desc: 'Estadísticas en tiempo real: carga por especialidad, urgencias del día, tendencias.', color: '#0d9488' },
+  { icon: Clock, title: 'Historial auditable', desc: 'Cada triaje queda registrado en la nube con su línea de tiempo completa.', color: '#0284c7' },
+  { icon: Shield, title: 'Seguro y confiable', desc: 'Base de datos relacional con RLS, acceso controlado y datos encriptados.', color: '#0d9488' },
 ]
 
 export default function Landing() {
   const navigate = useNavigate()
   const { theme, toggleTheme } = useTheme()
   const [loaded, setLoaded] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     setLoaded(true)
@@ -45,6 +46,14 @@ export default function Landing() {
           <span>Aura<strong>Med</strong></span>
         </div>
 
+        {/* NAVEGACIÓN DESKTOP & MOBILE */}
+        <nav className={`landing-nav ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+          <a href="#flujo" onClick={() => setIsMobileMenuOpen(false)}>Cómo funciona</a>
+          <a href="#dashboard" onClick={() => setIsMobileMenuOpen(false)}>Producto</a>
+          <a href="#testimonios" onClick={() => setIsMobileMenuOpen(false)}>Testimonios</a>
+          <a href="#cta" onClick={() => setIsMobileMenuOpen(false)}>Clínicas</a>
+        </nav>
+
         <div className="landing-header-right">
           <button className="landing-theme" onClick={toggleTheme} aria-label="Cambiar tema">
             {theme === 'light' ? <Moon size={17} /> : <Sun size={17} />}
@@ -52,11 +61,16 @@ export default function Landing() {
 
           {/* NUEVO: Botón sutil en el header para los doctores */}
           <button
-            className="btn-outline-glow"
+            className="btn-outline-glow btn-staff"
             onClick={() => navigate('/admin/dashboard')}
             style={{ display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-muted)' }}
           >
             <Lock size={14} /> Acceso Staff
+          </button>
+
+          {/* BOTÓN MENÚ HAMBURGUESA (Mobile) */}
+          <button className="landing-menu-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Menú">
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </header>
@@ -147,7 +161,7 @@ export default function Landing() {
       </section>
 
       {/* ─── CÓMO FUNCIONA (Timeline / Steps) ─── */}
-      <section className="landing-steps">
+      <section className="landing-steps" id="flujo">
         <div className="section-head">
           <span className="section-eyebrow">FLUJO AUTOMATIZADO</span>
           <h2>Triaje en 3 pasos simples</h2>
@@ -224,7 +238,7 @@ export default function Landing() {
       </section>
 
       {/* ─── FEATURES (Bento Grid) ──────────────────────────── */}
-      <section className="landing-features">
+      <section className="landing-features" id="dashboard">
         <div className="section-head">
           <span className="section-eyebrow">ARQUITECTURA CLÍNICA</span>
           <h2>Diseñado para la medicina del futuro</h2>
@@ -249,7 +263,7 @@ export default function Landing() {
       </section>
 
       {/* ─── TESTIMONIOS (Social Proof) ─── */}
-      <section className="landing-testimonials">
+      <section className="landing-testimonials" id="testimonios">
         <div className="section-head">
           <span className="section-eyebrow">CONFIANZA CLÍNICA</span>
           <h2>Aprobado por profesionales de la salud</h2>
@@ -289,7 +303,7 @@ export default function Landing() {
       </section>
 
       {/* ─── CTA BANNER ──────────────────────────────────────── */}
-      <section className="landing-cta">
+      <section className="landing-cta" id="cta">
         <div className="cta-box">
           <div className="cta-glow" />
           <h2>¿Listo para optimizar tu clínica?</h2>
