@@ -70,7 +70,7 @@ export default function Landing() {
           <div className="live-pill">
             <span className="pulse-dot"></span>
             <Sparkles size={13} className="pill-icon" />
-            <span>Motor Claude 3.5 Sonnet activo en el servidor</span>
+            <span>IA clínica en tiempo real</span>
           </div>
 
           <div className="landing-badge">
@@ -104,15 +104,6 @@ export default function Landing() {
         </div>
 
 
-        <div className="landing-stats">
-          {STATS.map((s) => (
-            <div className="stat-card" key={s.label}>
-              <span className="stat-value">{s.value}</span>
-              <span className="stat-label">{s.label}</span>
-            </div>
-          ))}
-        </div>
-
         {/* MOCKUP VISUAL DE LA APP */}
         <div className="hero-mockup-container">
           <div className="hero-mockup-glow"></div>
@@ -127,17 +118,31 @@ export default function Landing() {
               <div className="mockup-content">
                 <div className="mockup-card urgencia">
                   <div className="mockup-badge">URGENCIA</div>
-                  <div className="mockup-line title"></div>
-                  <div className="mockup-line text"></div>
+                  <div className="mockup-line title">María Gómez • Dolor torácico</div>
+                  <div className="mockup-line text">Opresión central severa, diaforesis, 58 años.</div>
                 </div>
                 <div className="mockup-card prioritario">
                   <div className="mockup-badge">PRIORITARIO</div>
-                  <div className="mockup-line title"></div>
-                  <div className="mockup-line text"></div>
+                  <div className="mockup-line title">Juan Pérez • Fiebre alta</div>
+                  <div className="mockup-line text">39.5°C, mialgia, cefalea intensa. 34 años.</div>
+                </div>
+                <div className="mockup-card general">
+                  <div className="mockup-badge" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>GENERAL</div>
+                  <div className="mockup-line title">Ana Silva • Tos seca</div>
+                  <div className="mockup-line text">Tos persistente hace 3 días, sin dificultad respiratoria.</div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="landing-stats">
+          {STATS.map((s) => (
+            <div className="stat-card" key={s.label}>
+              <span className="stat-value">{s.value}</span>
+              <span className="stat-label">{s.label}</span>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -200,6 +205,10 @@ export default function Landing() {
 
       {/* ─── MENTAL HEALTH WELLNESS ──────────────────────────── */}
       <section className="landing-wellness">
+        <div className="section-head">
+          <span className="section-eyebrow">MÁS QUE TRIAJE FÍSICO</span>
+          <h2>Atención integral para tu mente</h2>
+        </div>
         <div className="wellness-card">
           <div className="wellness-icon">
             <Brain size={32} />
@@ -283,10 +292,10 @@ export default function Landing() {
       <section className="landing-cta">
         <div className="cta-box">
           <div className="cta-glow" />
-          <h2>¿Listo para optimizar tu sala de espera?</h2>
-          <p>Prueba el flujo de ingreso de síntomas ahora mismo. No requiere tarjeta.</p>
-          <button className="btn-shimmer" onClick={() => navigate('/triaje')}>
-            Probar AuraMed gratis <ChevronRight size={18} />
+          <h2>¿Listo para optimizar tu clínica?</h2>
+          <p>Implementa AuraMed en tu centro de salud y reduce los tiempos de espera drásticamente.</p>
+          <button className="btn-shimmer" onClick={() => navigate('/admin/dashboard')}>
+            Agendar demo para tu clínica <ChevronRight size={18} />
           </button>
         </div>
       </section>
@@ -312,11 +321,41 @@ export default function Landing() {
 
       <footer className="landing-footer">
         <div className="footer-content">
-          <div className="landing-brand">
-            <span className="landing-logo">⚕</span>
-            <span>Aura<strong>Med</strong></span>
+          <div className="footer-column">
+            <div className="landing-brand" style={{ marginBottom: '16px' }}>
+              <div className="logo-container">
+                <span className="landing-logo">⚕</span>
+              </div>
+              <span>Aura<strong>Med</strong></span>
+            </div>
+            <p className="footer-description" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', maxWidth: '250px' }}>
+              El primer sistema de triaje impulsado por IA clínica para la medicina del futuro.
+            </p>
           </div>
-          <span className="footer-copy">Proyecto personal de Martin Aburto en proceso © 2026. Todos los derechos reservados.</span>
+          
+          <div className="footer-links">
+            <div className="footer-col">
+              <h4>Producto</h4>
+              <a href="#">Triaje IA</a>
+              <a href="#">Panel Médico</a>
+              <a href="#">Seguridad HIPAA</a>
+            </div>
+            <div className="footer-col">
+              <h4>Compañía</h4>
+              <a href="#">Sobre nosotros</a>
+              <a href="#">Casos de éxito</a>
+              <a href="#">Contacto</a>
+            </div>
+            <div className="footer-col">
+              <h4>Legal</h4>
+              <a href="#">Privacidad</a>
+              <a href="#">Términos de servicio</a>
+            </div>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <span className="footer-copy">© 2026 AuraMed. Todos los derechos reservados.</span>
+          <span className="footer-credit">Proyecto personal de Martin Aburto en proceso.</span>
         </div>
       </footer>
 
